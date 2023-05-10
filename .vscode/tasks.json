@@ -1,0 +1,47 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: gcc.exe 生成活动文件",
+			"command": "G:\\mingw64\\bin\\gcc.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"G:/cxkFindWay/lib/exceptio.o",
+				"G:/cxkFindWay/lib/genlib.o",
+				"G:/cxkFindWay/graphics.o",
+				"G:/cxkFindWay/linkedlist.o",
+				"G:/cxkFindWay/random.o",
+				"G:/cxkFindWay/simpio.o",
+				"G:/cxkFindWay/strlib.o",
+				"${file}",
+				"-I",
+				"G:/cxkFindWay/include",
+				"-L",
+				"G:/mingw64/lib",
+				"-L",
+				"G:/mingw64/x86_64-w64-mingw32/lib",
+				"-static",
+				"-lgcc",
+				"-mwindows",
+				"-o",
+				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+			],
+			"options": {
+				"cwd": "G:/mingw64/bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"detail": "编译器: G:\\mingw64\\bin\\gcc.exe"
+			
+		}
+	]	
+}
+
+
