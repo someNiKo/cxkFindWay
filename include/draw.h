@@ -23,7 +23,7 @@
 
 
 
-void DrawKUN(double x, double y, int fps);
+void DrawKUN(double x, double y, int fps, bool direction);
 void DrawMenu();
 void DrawButton();
 void DrawBox();

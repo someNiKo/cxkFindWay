@@ -79,7 +79,10 @@ static struct kun{
     double y;  //坤的纵坐标
     double MOVE;  //坤的移动速度
     int fps;  //坤动画的帧数
-}KUN = {0, 0, 1, 0};
+	bool direction;
+}KUN = {0, 0, 1, 0, 0};
+
+static bool isKUN_a = 0;
 
 typedef enum{
     FPS,
@@ -102,6 +105,7 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
+
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -112,11 +116,12 @@ void Main()
 	registerTimerEvent(TimerEventProcess);
 
 	startTimer(FPS,100);  //启动10fps/s计时器
+	startTimer(KUN_a,200);  //启动加速度定时器
 
 	//初始化坤的坐标
 	KUN.x = screen_x/2;
 	KUN.y = screen_y/2;
-	DrawKUN(KUN.x, KUN.y, KUN.fps);
+	DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 
 }
 
@@ -135,28 +140,35 @@ void KeyboardEventProcess(int key,int event)
 				case VK_UP:
 					KUN.x = KUN.x;
 					KUN.y = KUN.y + KUN.MOVE;
+					isKUN_a = 1;
 					break;
 				case VK_a:
 				case VK_A:
 				case VK_LEFT:
 					KUN.x = KUN.x - KUN.MOVE;
 					KUN.y = KUN.y;
+					isKUN_a = 1;
+					KUN.direction = 1;
 					break;
 				case VK_s:
 				case VK_S:
 				case VK_DOWN:
 					KUN.x = KUN.x;
 					KUN.y = KUN.y - KUN.MOVE;
+					isKUN_a = 1;
 					break;
 				case VK_d:
 				case VK_D:
 				case VK_RIGHT:
 					KUN.x = KUN.x + KUN.MOVE;
 					KUN.y = KUN.y;
+					isKUN_a = 1;
+					KUN.direction = 0;
 					break;				
 			}
 			break;
 		case KEY_UP:
+			isKUN_a = 0;
 			KUN.MOVE = 1;
 			break;
 	}
@@ -197,9 +209,13 @@ void TimerEventProcess(int timerID)
         }
         display();
         break;
-    case KUN_a:
-
-        break;    
+    case KUN_a:  //坤运动加速度的实现
+		if(isKUN_a == 1 && KUN.MOVE < 4){
+			KUN.MOVE += 1;
+		}else if(isKUN_a == 1 && KUN.MOVE < 9){
+			KUN.MOVE += 2;
+		}
+		break;    
     default:
         break;
     }
@@ -218,5 +234,5 @@ void display()
     DisplayClear();
     
     //画坤
-    DrawKUN(KUN.x, KUN.y, KUN.fps);
+    DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 }
