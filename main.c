@@ -119,6 +119,12 @@ void Main()
 	startTimer(FPS,100);  //启动10fps/s计时器
 	startTimer(KUN_a,200);  //启动加速度定时器
 
+	DefineColor("Purple", .6, .6, .95);
+	DefineColor("DYellow", 1, .76, 0);
+	DefineColor("MCyan", .63, .86, .95);
+	DefineColor("Wood", .74, .69, .68);
+	DefineColor("Face", .87, .73, .75);
+
 	//初始化坤的坐标
 	KUN.x = screen_x/2;
 	KUN.y = screen_y/2;
@@ -244,6 +250,9 @@ void display()
 {
     //清屏
     DisplayClear();
+
+	//画舞台
+	DrawStage();
     
     //画坤
     DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);

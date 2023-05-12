@@ -60,11 +60,16 @@ void DrawKUN(double x, double y, int fps, bool direction)
 }
 
 void fps0(double x, double y, bool direction)
-{
-	SetPenColor("Black");
-	SetPenSize(2);
-	
+{	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y);    //坤头半径为10像素
 	DrawArc(10,0,360);
 	
@@ -108,7 +113,7 @@ void fps0(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y);
 	DrawLine(0,-15);
@@ -161,13 +166,18 @@ void fps0(double x, double y, bool direction)
 }
 
 void fps1(double x, double y, bool direction)
-{
-	SetPenColor("Black");
-	SetPenSize(2);
-	
+{	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 1);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 1);    //坤头半径为10像素
-	DrawArc(10,0,360);
+	DrawArc(10,0,360);	
 	
 	//画左坤头
 	MovePen(x,y - 1 + 10);
@@ -209,7 +219,7 @@ void fps1(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 1);
 	DrawLine(0,-15);
@@ -262,10 +272,15 @@ void fps1(double x, double y, bool direction)
 
 void fps2(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 2);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 2);    //坤头半径为10像素
 	DrawArc(10,0,360);
 	
@@ -309,7 +324,7 @@ void fps2(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 2);
 	DrawLine(0,-15);
@@ -374,12 +389,17 @@ void fps2(double x, double y, bool direction)
 
 void fps3(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 3);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 3);    //坤头半径为10像素
-	DrawArc(10,0,360);
+	DrawArc(10,0,360);	
 	
 	//画左坤头
 	MovePen(x,y - 3 + 10);
@@ -421,7 +441,7 @@ void fps3(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 3);
 	DrawLine(0,-15);
@@ -486,12 +506,17 @@ void fps3(double x, double y, bool direction)
 
 void fps4(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 4);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 4);    //坤头半径为10像素
-	DrawArc(10,0,360);
+	DrawArc(10,0,360);	
 	
 	//画左坤头
 	MovePen(x,y - 4 + 10);
@@ -533,7 +558,7 @@ void fps4(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 4);
 	DrawLine(0,-15);
@@ -600,12 +625,17 @@ void fps4(double x, double y, bool direction)
 
 void fps5(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 4);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 4);    //坤头半径为10像素
-	DrawArc(10,0,360);
+	DrawArc(10,0,360);	
 	
 	//画左坤头
 	MovePen(x,y - 4 + 10);
@@ -647,7 +677,7 @@ void fps5(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 4);
 	DrawLine(0,-15);
@@ -710,12 +740,17 @@ void fps5(double x, double y, bool direction)
 
 void fps6(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 3);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 3);    //坤头半径为10像素
-	DrawArc(10,0,360);
+	DrawArc(10,0,360);	
 	
 	//画左坤头
 	MovePen(x,y - 3 + 10);
@@ -757,7 +792,7 @@ void fps6(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 3);
 	DrawLine(0,-15);
@@ -820,10 +855,15 @@ void fps6(double x, double y, bool direction)
 
 void fps7(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 2);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 2);    //坤头半径为10像素
 	DrawArc(10,0,360);
 	
@@ -867,7 +907,7 @@ void fps7(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 2);
 	DrawLine(0,-15);
@@ -930,10 +970,15 @@ void fps7(double x, double y, bool direction)
 
 void fps8(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y - 1);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y - 1);    //坤头半径为10像素
 	DrawArc(10,0,360);
 	
@@ -977,7 +1022,7 @@ void fps8(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 1);
 	DrawLine(0,-15);
@@ -1030,10 +1075,15 @@ void fps8(double x, double y, bool direction)
 
 void fps9(double x, double y, bool direction)
 {
-	SetPenColor("Black");
-	SetPenSize(2);
-	
 	//画坤脸
+	StartFilledRegion(1);
+	SetPenColor("Face");
+	SetPenSize(2);	
+	MovePen(x+9,y);
+	DrawArc(9,0,360);
+	EndFilledRegion();		
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x+10,y);    //坤头半径为10像素
 	DrawArc(10,0,360);
 	
@@ -1077,7 +1127,7 @@ void fps9(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Brown");
+	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y);
 	DrawLine(0,-15);
@@ -1127,6 +1177,62 @@ void fps9(double x, double y, bool direction)
 	DrawLine(-5, -7);
 	}
 }
+
+
+void DrawStage(void)
+{
+	SetPenSize(1);
+	SetPenColor("Purple");
+	StartFilledRegion(1);
+	MovePen(0, 1080);
+	DrawLine(50, 0);
+	DrawLine(250, -250);
+	DrawLine(0, -150);
+	DrawLine(-300, 300);
+	DrawLine(0, 100);
+	EndFilledRegion();
+
+	StartFilledRegion(1);	
+	SetPenSize(1);
+	SetPenColor("MCyan");
+	MovePen(30, 980 - 30);
+	DrawLine(750, -750);
+	DrawLine(-200, 0);
+	DrawLine(-550, 550);
+	DrawLine(0, 200);	
+	EndFilledRegion();
+
+	StartFilledRegion(1);
+	SetPenColor("Wood");
+	SetPenSize(1);
+	MovePen(0, 200);
+	DrawLine(1920, 0);
+	DrawLine(0, -200);
+	DrawLine(-1920, 0);
+	DrawLine(0, 200);
+	EndFilledRegion();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*****************
 画菜单函数
