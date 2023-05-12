@@ -59,7 +59,6 @@ void DrawKUN(double x, double y, int fps, bool direction)
 	}	
 }
 
-
 void fps0(double x, double y, bool direction)
 {
 	SetPenColor("Black");
@@ -109,7 +108,7 @@ void fps0(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y);
 	DrawLine(0,-15);
@@ -120,10 +119,20 @@ void fps0(double x, double y, bool direction)
 	//画左手
 	SetPenColor("Black");
 	SetPenSize(2);
-	MovePen(x - 10, y - 10);
+	MovePen(x - 10, y - 12);
 	DrawLine(-15, -10);
 
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x - 15, y - 22);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
+
 	//画右手
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 10, y - 10);
 	DrawLine(15, -10);
 
@@ -200,7 +209,7 @@ void fps1(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 1);
 	DrawLine(0,-15);
@@ -214,7 +223,17 @@ void fps1(double x, double y, bool direction)
 	MovePen(x - 10, y - 10 - 1);
 	DrawLine(-14, -10.5);
 
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x - 11, y - 25);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
+
 	//画右手
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 1);
 	DrawLine(14, -10.5);
 
@@ -290,7 +309,7 @@ void fps2(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 2);
 	DrawLine(0,-15);
@@ -305,6 +324,8 @@ void fps2(double x, double y, bool direction)
 	DrawLine(-13, -11);
 
 	//画右手
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 2);
 	DrawLine(13, -11);
 
@@ -313,21 +334,41 @@ void fps2(double x, double y, bool direction)
 	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-9, -6);
 	DrawLine(9, -6);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x - 8, y - 28);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
 	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-7, -6);
 	DrawLine(7, -6);
 	}else{
-			//画左鸡脚
-	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
-	DrawLine(9, -6);
-	DrawLine(-9, -6);
-	
 	//画右鸡脚
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(7, -6);
 	DrawLine(-7, -6);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x - 8, y - 28);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
+
+	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
+	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
+	DrawLine(9, -6);
+	DrawLine(-9, -6);
 	}
 }
 
@@ -380,7 +421,7 @@ void fps3(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 3);
 	DrawLine(0,-15);
@@ -395,29 +436,51 @@ void fps3(double x, double y, bool direction)
 	DrawLine(-11.5, -12);
 
 	//画右手
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 3);
 	DrawLine(11.5, -12);
 
 	if(direction){
-			//画左鸡脚
+	//画左鸡脚
 	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-10, -5.5);
 	DrawLine(9, -5.5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x - 4, y - 32);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
 	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-8, -5.5);
 	DrawLine(7.5, -5.5);
 	}else{
-			//画左鸡脚
-	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
-	DrawLine(10, -5.5);
-	DrawLine(-9, -5.5);
-	
 	//画右鸡脚
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(8, -5.5);
 	DrawLine(-7.5, -5.5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x - 4, y - 32);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
+
+	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
+	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
+	DrawLine(10, -5.5);
+	DrawLine(-9, -5.5);
 	}
 }
 
@@ -470,7 +533,7 @@ void fps4(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 4);
 	DrawLine(0,-15);
@@ -490,24 +553,48 @@ void fps4(double x, double y, bool direction)
 
 	if(direction){
 	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-11, -5);
 	DrawLine(9, -5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x, y - 35);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
 	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-9, -5);
 	DrawLine(8, -5);
 	}else{
-			//画左鸡脚
-	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
-	DrawLine(11, -5);
-	DrawLine(-9, -5);
-	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(9, -5);
 	DrawLine(-8, -5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x, y - 35);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
+	
+	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
+	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
+	DrawLine(11, -5);
+	DrawLine(-9, -5);
 	}
 }
 
@@ -560,7 +647,7 @@ void fps5(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 4);
 	DrawLine(0,-15);
@@ -583,21 +670,41 @@ void fps5(double x, double y, bool direction)
 	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-11, -5);
 	DrawLine(9, -5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 2, y - 35);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
 	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-9, -5);
 	DrawLine(8, -5);
-	}else{
-			//画左鸡脚
-	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
-	DrawLine(11, -5);
-	DrawLine(-9, -5);
-	
+	}else{	
 	//画右鸡脚
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(9, -5);
 	DrawLine(-8, -5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 2, y - 35);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
+
+	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
+	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
+	DrawLine(11, -5);
+	DrawLine(-9, -5);	
 	}
 }
 
@@ -650,7 +757,7 @@ void fps6(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 3);
 	DrawLine(0,-15);
@@ -673,21 +780,41 @@ void fps6(double x, double y, bool direction)
 	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-10, -5.5);
 	DrawLine(9, -5.5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 8, y - 32);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
 	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-8, -5.5);
 	DrawLine(7.5, -5.5);
 	}else{
-			//画左鸡脚
-	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
-	DrawLine(10, -5.5);
-	DrawLine(-9, -5.5);
-	
 	//画右鸡脚
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(8, -5.5);
 	DrawLine(-7.5, -5.5);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 8, y - 32);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
+
+	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
+	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
+	DrawLine(10, -5.5);
+	DrawLine(-9, -5.5);
 	}
 }
 
@@ -740,7 +867,7 @@ void fps7(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 2);
 	DrawLine(0,-15);
@@ -763,21 +890,41 @@ void fps7(double x, double y, bool direction)
 	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-9, -6);
 	DrawLine(9, -6);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 14, y - 28);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
 	
 	//画右鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-7, -6);
 	DrawLine(7, -6);
 	}else{
-			//画左鸡脚
-	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
-	DrawLine(9, -6);
-	DrawLine(-9, -6);
-	
 	//画右鸡脚
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(7, -6);
 	DrawLine(-7, -6);
+
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 14, y - 28);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();	
+
+	//画左鸡脚
+	SetPenColor("Black");
+	SetPenSize(2);	
+	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
+	DrawLine(9, -6);
+	DrawLine(-9, -6);
 	}
 }
 
@@ -830,7 +977,7 @@ void fps8(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 1);
 	DrawLine(0,-15);
@@ -844,7 +991,17 @@ void fps8(double x, double y, bool direction)
 	MovePen(x - 10, y - 10 - 1);
 	DrawLine(-14, -10.5);
 
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 20, y - 24);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
+
 	//画右手
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 1);
 	DrawLine(14, -10.5);
 
@@ -920,7 +1077,7 @@ void fps9(double x, double y, bool direction)
 	}
 
 	//画背带裤
-	SetPenColor("Yellow");
+	SetPenColor("Brown");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y);
 	DrawLine(0,-15);
@@ -934,7 +1091,17 @@ void fps9(double x, double y, bool direction)
 	MovePen(x - 10, y - 10);
 	DrawLine(-15, -10);
 
+	//篮球
+	SetPenColor("Orange");
+	SetPenSize(1);
+	StartFilledRegion(1);
+	MovePen(x + 26, y - 24);
+	DrawArc(5, 0, 360);
+	EndFilledRegion();
+
 	//画右手
+	SetPenColor("Black");
+	SetPenSize(2);	
 	MovePen(x + 10, y - 10);
 	DrawLine(15, -10);
 

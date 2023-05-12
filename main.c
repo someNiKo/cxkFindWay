@@ -83,6 +83,7 @@ static struct kun{
 }KUN = {0, 0, 1, 0, 0};
 
 static bool isKUN_a = 0;
+static bool flag = 1;
 
 typedef enum{
     FPS,
@@ -202,11 +203,22 @@ void TimerEventProcess(int timerID)
     switch (timerID)
     {
     case FPS:
-        if(KUN.fps < 9){
-            KUN.fps += 1;
-        }else{
-            KUN.fps = 0;
-        }
+		if(flag){
+			if(KUN.fps == 9){
+				flag = !flag;
+			}			
+			if(KUN.fps < 9){
+            	KUN.fps += 1;
+        	}	
+		}
+		if(!flag){
+			if(KUN.fps == 0){
+				flag = !flag;
+			}
+			if(KUN.fps > 0){
+				KUN.fps -= 1;
+			}
+		}
         display();
         break;
     case KUN_a:  //坤运动加速度的实现
