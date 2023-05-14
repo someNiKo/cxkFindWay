@@ -24,6 +24,10 @@
         "utility": "c",
         "windows.h": "c",
         "olectl.h": "c",
-        "draw.h": "c"
+        "draw.h": "c",
+        "find.h": "c",
+        "istream": "c",
+        "ostream": "c",
+        "time.h": "c"
     }
 }

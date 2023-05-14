@@ -2,13 +2,13 @@
 #include "include/extgraph.h"
 #include "include/genlib.h"
 #include "include/simpio.h"
-#include "include/imgui.h"
 #include "include/draw.h"
 #include "include/find.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <time.h>
 
 #include <windows.h>
 #include <olectl.h>
@@ -18,7 +18,7 @@
 #include <ocidl.h>
 #include <winuser.h>
 
-//A~Zçš„VK
+//A~ZµÄVK
 #define   VK_A	0x41 
 #define   VK_B	0x42 
 #define   VK_C	0x43 
@@ -46,7 +46,7 @@
 #define   VK_Y	0x59 
 #define   VK_Z	0x5A  
 
-//a~zçš„VK
+//a~zµÄVK
 #define   VK_a	0x61 
 #define   VK_b	0x62 
 #define   VK_c	0x63 
@@ -75,19 +75,20 @@
 #define   VK_z	0x7A
 
 static struct kun{
-    double x;  //å¤çš„æ¨ªåæ ‡
-    double y;  //å¤çš„çºµåæ ‡
-    double MOVE;  //å¤çš„ç§»åŠ¨é€Ÿåº¦
-    int fps;  //å¤åŠ¨ç”»çš„å¸§æ•°
+    double x;  //À¤µÄºá×ø±ê
+    double y;  //À¤µÄ×İ×ø±ê
+    double MOVE;  //À¤µÄÒÆ¶¯ËÙ¶È
+    int fps;  //À¤¶¯»­µÄÖ¡Êı
 	bool direction;
 }KUN = {0, 0, 1, 0, 0};
 
 static bool isKUN_a = 0;
-static bool flag = 1;
+static bool fps_flag = 1;
 
 typedef enum{
     FPS,
     KUN_a,
+	FPS_ALL,
 } Mytimer;
 
 void KeyboardEventProcess(int key,int event);
@@ -106,7 +107,7 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-
+	//InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -116,8 +117,9 @@ void Main()
 	registerMouseEvent(MouseEventProcess);
 	registerTimerEvent(TimerEventProcess);
 
-	startTimer(FPS,100);  //å¯åŠ¨10fps/sè®¡æ—¶å™¨
-	startTimer(KUN_a,200);  //å¯åŠ¨åŠ é€Ÿåº¦å®šæ—¶å™¨
+	startTimer(FPS, 100);  //Æô¶¯10fps/s¼ÆÊ±Æ÷
+	startTimer(KUN_a, 200);  //Æô¶¯¼ÓËÙ¶È¶¨Ê±Æ÷
+	startTimer(FPS_ALL, 8);  //ÆÁÄ»60Ö¡¶¨Ê±Æ÷
 
 	DefineColor("Purple", .6, .6, .95);
 	DefineColor("DYellow", 1, .76, 0);
@@ -125,7 +127,7 @@ void Main()
 	DefineColor("Wood", .74, .69, .68);
 	DefineColor("Face", .87, .73, .75);
 
-	//åˆå§‹åŒ–å¤çš„åæ ‡
+	//³õÊ¼»¯À¤µÄ×ø±ê
 	KUN.x = screen_x/2;
 	KUN.y = screen_y/2;
 	DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
@@ -134,11 +136,10 @@ void Main()
 
 
 /********************
-é”®ç›˜æ¶ˆæ¯å›è°ƒå‡½æ•°
+¼üÅÌÏûÏ¢»Øµ÷º¯Êı
 **********************/
 void KeyboardEventProcess(int key,int event)
 {
-    uiGetKeyboard(key, event);
     switch(event){
 		case KEY_DOWN:
 			switch(key){
@@ -184,42 +185,41 @@ void KeyboardEventProcess(int key,int event)
 }
 
 /********************
-å­—ç¬¦æ¶ˆæ¯å›è°ƒå‡½æ•°
+×Ö·ûÏûÏ¢»Øµ÷º¯Êı
 **********************/
 void CharEventProcess(char c)
 {
-    uiGetChar(c);
-    display();
+    //display();
 }
 
 /********************
-é¼ æ ‡æ¶ˆæ¯å›è°ƒå‡½æ•°
+Êó±êÏûÏ¢»Øµ÷º¯Êı
 **********************/
 void MouseEventProcess(int x, int y, int button, int event)
 {
-    uiGetMouse(x, y, button, event);
-    display();
+
+	
 }
 
 /********************
-å®šæ—¶å™¨æ¶ˆæ¯å›è°ƒå‡½æ•°
+¶¨Ê±Æ÷ÏûÏ¢»Øµ÷º¯Êı
 **********************/
 void TimerEventProcess(int timerID)
 {
     switch (timerID)
     {
     case FPS:
-		if(flag){
+		if(fps_flag){
 			if(KUN.fps == 9){
-				flag = !flag;
+				fps_flag = !fps_flag;
 			}			
 			if(KUN.fps < 9){
             	KUN.fps += 1;
         	}	
 		}
-		if(!flag){
+		if(!fps_flag){
 			if(KUN.fps == 0){
-				flag = !flag;
+				fps_flag = !fps_flag;
 			}
 			if(KUN.fps > 0){
 				KUN.fps -= 1;
@@ -227,14 +227,16 @@ void TimerEventProcess(int timerID)
 		}
         display();
         break;
-    case KUN_a:  //å¤è¿åŠ¨åŠ é€Ÿåº¦çš„å®ç°
+    case KUN_a:  //À¤ÔË¶¯¼ÓËÙ¶ÈµÄÊµÏÖ
 		if(isKUN_a == 1 && KUN.MOVE < 4){
 			KUN.MOVE += 1;
 		}else if(isKUN_a == 1 && KUN.MOVE < 9){
 			KUN.MOVE += 2;
 		}
-		break;    
-    default:
+		break;
+	case FPS_ALL:
+		display();    
+	default:
         break;
     }
 }
@@ -242,18 +244,26 @@ void TimerEventProcess(int timerID)
 
 
 /*****************
-åˆ·æ–°æ˜¾ç¤ºå‡½æ•°ï¼Œä¾èµ–å…¨å±€å˜é‡
-æ”¾åœ¨æ¯ä¸ªæ¶ˆæ¯å›è°ƒå‡½æ•°çš„æœ€å
-æœ€ä¸Šå±‚å›¾å±‚åœ¨å‡½æ•°æœ€ä¸‹éƒ¨åˆ†
+Ë¢ĞÂÏÔÊ¾º¯Êı£¬ÒÀÀµÈ«¾Ö±äÁ¿
+·ÅÔÚÃ¿¸öÏûÏ¢»Øµ÷º¯ÊıµÄ×îºó
+×îÉÏ²ãÍ¼²ãÔÚº¯Êı×îÏÂ²¿·Ö
 ******************/
 void display()
 {
-    //æ¸…å±
+    //ÇåÆÁ
     DisplayClear();
 
-	//ç”»èˆå°
+	//»­ÎèÌ¨
 	DrawStage();
     
-    //ç”»å¤
+    //»­À¤
     DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
+
+	//×Ö
+	MovePen(300, 300);
+	SetPenColor("Black");
+	SetPointSize(100);
+	SetFont("ÎÄµÀ»úĞµºÚ");
+	string a = "Å¼ÏñÁ·Ï°Éú";
+	DrawTextString(a);
 }

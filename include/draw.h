@@ -5,7 +5,7 @@
 #include "extgraph.h"
 #include "genlib.h"
 #include "simpio.h"
-#include "imgui.h"
+//#include "imgui.h"
 
 #include <stdio.h>
 #include <stdlib.h>

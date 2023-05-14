@@ -4,7 +4,7 @@
 #define PI acos(-1)
 #define kun_beidai_y 5*tan(PI/3)
 
-//å¤åŠ¨ç”»çš„10å¸§
+//À¤¶¯»­µÄ10Ö¡
 void fps0(double x, double y, bool direction);
 void fps1(double x, double y, bool direction);
 void fps2(double x, double y, bool direction);
@@ -18,7 +18,7 @@ void fps9(double x, double y, bool direction);
 
 
 /**************
-ä¼ å…¥å¤çš„åæ ‡å’Œæ–¹å‘
+´«ÈëÀ¤µÄ×ø±êºÍ·½Ïò
 ***************/
 void DrawKUN(double x, double y, int fps, bool direction)
 {
@@ -61,7 +61,7 @@ void DrawKUN(double x, double y, int fps, bool direction)
 
 void fps0(double x, double y, bool direction)
 {	
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -70,10 +70,10 @@ void fps0(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y+10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -81,7 +81,7 @@ void fps0(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y+10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -89,7 +89,7 @@ void fps0(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y;
 	int i = 1;
@@ -101,7 +101,7 @@ void fps0(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y;
 	i=1;
 	while(i < 5){
@@ -112,7 +112,7 @@ void fps0(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y);
@@ -121,13 +121,13 @@ void fps0(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 12);
 	DrawLine(-15, -10);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -135,29 +135,29 @@ void fps0(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 10, y - 10);
 	DrawLine(15, -10);
 
 	if(direction){
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15);
 	DrawLine(-7, -7);
 	DrawLine(7, -7);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15);
 	DrawLine(-5, -7);
 	DrawLine(5, -7);
 	}else{
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15);
 	DrawLine(7, -7);
 	DrawLine(-7, -7);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15);
 	DrawLine(5, -7);
 	DrawLine(-5, -7);
@@ -167,7 +167,7 @@ void fps0(double x, double y, bool direction)
 
 void fps1(double x, double y, bool direction)
 {	
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -176,10 +176,10 @@ void fps1(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 1);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 1);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);	
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 1 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -187,7 +187,7 @@ void fps1(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 1 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -195,7 +195,7 @@ void fps1(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 1;
 	int i = 1;
@@ -207,7 +207,7 @@ void fps1(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 1;
 	i=1;
 	while(i < 5){
@@ -218,7 +218,7 @@ void fps1(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 1);
@@ -227,13 +227,13 @@ void fps1(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 1);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 1);
 	DrawLine(-14, -10.5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -241,29 +241,29 @@ void fps1(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 1);
 	DrawLine(14, -10.5);
 
 	if(direction){
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(-8, -6.5);
 	DrawLine(8, -6.5);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(-6, -6.5);
 	DrawLine(6, -6.5);
 	}else{
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(8, -6.5);
 	DrawLine(-8, -6.5);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(6, -6.5);
 	DrawLine(-6, -6.5);
@@ -272,7 +272,7 @@ void fps1(double x, double y, bool direction)
 
 void fps2(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -281,10 +281,10 @@ void fps2(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 2);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 2);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 2 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -292,7 +292,7 @@ void fps2(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 2 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -300,7 +300,7 @@ void fps2(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 2;
 	int i = 1;
@@ -312,7 +312,7 @@ void fps2(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 2;
 	i=1;
 	while(i < 5){
@@ -323,7 +323,7 @@ void fps2(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 2);
@@ -332,25 +332,25 @@ void fps2(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 2);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 2);
 	DrawLine(-13, -11);
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 2);
 	DrawLine(13, -11);
 
 	if(direction){
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-9, -6);
 	DrawLine(9, -6);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -358,19 +358,19 @@ void fps2(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-7, -6);
 	DrawLine(7, -6);
 	}else{
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(7, -6);
 	DrawLine(-7, -6);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -378,7 +378,7 @@ void fps2(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
@@ -389,7 +389,7 @@ void fps2(double x, double y, bool direction)
 
 void fps3(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -398,10 +398,10 @@ void fps3(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 3);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 3);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);	
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 3 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -409,7 +409,7 @@ void fps3(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 3 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -417,7 +417,7 @@ void fps3(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 3;
 	int i = 1;
@@ -429,7 +429,7 @@ void fps3(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 3;
 	i=1;
 	while(i < 5){
@@ -440,7 +440,7 @@ void fps3(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 3);
@@ -449,25 +449,25 @@ void fps3(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 3);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 3);
 	DrawLine(-11.5, -12);
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 3);
 	DrawLine(11.5, -12);
 
 	if(direction){
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-10, -5.5);
 	DrawLine(9, -5.5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -475,19 +475,19 @@ void fps3(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-8, -5.5);
 	DrawLine(7.5, -5.5);
 	}else{
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(8, -5.5);
 	DrawLine(-7.5, -5.5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -495,7 +495,7 @@ void fps3(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
@@ -506,7 +506,7 @@ void fps3(double x, double y, bool direction)
 
 void fps4(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -515,10 +515,10 @@ void fps4(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 4);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 4);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);	
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 4 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -526,7 +526,7 @@ void fps4(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 4 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -534,7 +534,7 @@ void fps4(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 4;
 	int i = 1;
@@ -546,7 +546,7 @@ void fps4(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 4;
 	i=1;
 	while(i < 5){
@@ -557,7 +557,7 @@ void fps4(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 4);
@@ -566,25 +566,25 @@ void fps4(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 4);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 4);
 	DrawLine(-10, -13);
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	MovePen(x + 10, y - 10 - 4);
 	DrawLine(10, -13);
 
 	if(direction){
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-11, -5);
 	DrawLine(9, -5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -592,21 +592,21 @@ void fps4(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-9, -5);
 	DrawLine(8, -5);
 	}else{
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(9, -5);
 	DrawLine(-8, -5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -614,7 +614,7 @@ void fps4(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 	
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
@@ -625,7 +625,7 @@ void fps4(double x, double y, bool direction)
 
 void fps5(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -634,10 +634,10 @@ void fps5(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 4);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 4);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);	
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 4 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -645,7 +645,7 @@ void fps5(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 4 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -653,7 +653,7 @@ void fps5(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 4;
 	int i = 1;
@@ -665,7 +665,7 @@ void fps5(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 4;
 	i=1;
 	while(i < 5){
@@ -676,7 +676,7 @@ void fps5(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 4);
@@ -685,23 +685,23 @@ void fps5(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 4);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 4);
 	DrawLine(-10, -13);
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	MovePen(x + 10, y - 10 - 4);
 	DrawLine(10, -13);
 
 	if(direction){
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-11, -5);
 	DrawLine(9, -5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -709,19 +709,19 @@ void fps5(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(-9, -5);
 	DrawLine(8, -5);
 	}else{	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 4);
 	DrawLine(9, -5);
 	DrawLine(-8, -5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -729,7 +729,7 @@ void fps5(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 4);
@@ -740,7 +740,7 @@ void fps5(double x, double y, bool direction)
 
 void fps6(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -749,10 +749,10 @@ void fps6(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 3);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 3);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);	
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 3 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -760,7 +760,7 @@ void fps6(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 3 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -768,7 +768,7 @@ void fps6(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 3;
 	int i = 1;
@@ -780,7 +780,7 @@ void fps6(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 3;
 	i=1;
 	while(i < 5){
@@ -791,7 +791,7 @@ void fps6(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 3);
@@ -800,23 +800,23 @@ void fps6(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 3);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 3);
 	DrawLine(-11.5, -12);
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	MovePen(x + 10, y - 10 - 3);
 	DrawLine(11.5, -12);
 
 	if(direction){
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-10, -5.5);
 	DrawLine(9, -5.5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -824,19 +824,19 @@ void fps6(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(-8, -5.5);
 	DrawLine(7.5, -5.5);
 	}else{
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 3);
 	DrawLine(8, -5.5);
 	DrawLine(-7.5, -5.5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -844,7 +844,7 @@ void fps6(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 3);
@@ -855,7 +855,7 @@ void fps6(double x, double y, bool direction)
 
 void fps7(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -864,10 +864,10 @@ void fps7(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 2);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 2);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 2 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -875,7 +875,7 @@ void fps7(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 2 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -883,7 +883,7 @@ void fps7(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 2;
 	int i = 1;
@@ -895,7 +895,7 @@ void fps7(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 2;
 	i=1;
 	while(i < 5){
@@ -906,7 +906,7 @@ void fps7(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 2);
@@ -915,23 +915,23 @@ void fps7(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 2);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 2);
 	DrawLine(-13, -11);
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	MovePen(x + 10, y - 10 - 2);
 	DrawLine(13, -11);
 
 	if(direction){
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-9, -6);
 	DrawLine(9, -6);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -939,19 +939,19 @@ void fps7(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(-7, -6);
 	DrawLine(7, -6);
 	}else{
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 2);
 	DrawLine(7, -6);
 	DrawLine(-7, -6);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -959,7 +959,7 @@ void fps7(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();	
 
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x - 6, y - kun_beidai_y - 15 - 2);
@@ -970,7 +970,7 @@ void fps7(double x, double y, bool direction)
 
 void fps8(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -979,10 +979,10 @@ void fps8(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y - 1);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y - 1);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y - 1 + 10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -990,7 +990,7 @@ void fps8(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y - 1 + 10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -998,7 +998,7 @@ void fps8(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y - 1;
 	int i = 1;
@@ -1010,7 +1010,7 @@ void fps8(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y - 1;
 	i=1;
 	while(i < 5){
@@ -1021,7 +1021,7 @@ void fps8(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y - 1);
@@ -1030,13 +1030,13 @@ void fps8(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y - 1);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10 - 1);
 	DrawLine(-14, -10.5);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -1044,29 +1044,29 @@ void fps8(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 10, y - 10 - 1);
 	DrawLine(14, -10.5);
 
 	if(direction){
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(-8, -6.5);
 	DrawLine(8, -6.5);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(-6, -6.5);
 	DrawLine(6, -6.5);
 	}else{
-			//ç”»å·¦é¸¡è„š
+			//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(8, -6.5);
 	DrawLine(-8, -6.5);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(6, -6.5);
 	DrawLine(-6, -6.5);
@@ -1075,7 +1075,7 @@ void fps8(double x, double y, bool direction)
 
 void fps9(double x, double y, bool direction)
 {
-	//ç”»å¤è„¸
+	//»­À¤Á³
 	StartFilledRegion(1);
 	SetPenColor("Face");
 	SetPenSize(2);	
@@ -1084,10 +1084,10 @@ void fps9(double x, double y, bool direction)
 	EndFilledRegion();		
 	SetPenColor("Black");
 	SetPenSize(2);	
-	MovePen(x+10,y);    //å¤å¤´åŠå¾„ä¸º10åƒç´ 
+	MovePen(x+10,y);    //À¤Í·°ë¾¶Îª10ÏñËØ
 	DrawArc(10,0,360);
 	
-	//ç”»å·¦å¤å¤´
+	//»­×óÀ¤Í·
 	MovePen(x,y+10);
 	DrawLine(0,5);
 	DrawLine(-15,-15);
@@ -1095,7 +1095,7 @@ void fps9(double x, double y, bool direction)
 	DrawLine(10,10);
 	DrawLine(0,5);
 	
-	//ç”»å³å¤å¤´
+	//»­ÓÒÀ¤Í·
 	MovePen(x,y+10);
 	DrawLine(0,5);
 	DrawLine(15,-15);
@@ -1103,7 +1103,7 @@ void fps9(double x, double y, bool direction)
 	DrawLine(-10,10);
 	DrawLine(0,5);
 
-	//å¡«å……å·¦å¤å¤´
+	//Ìî³ä×óÀ¤Í·
 	SetPenColor("Gray");
 	double px = x-15, py = y;
 	int i = 1;
@@ -1115,7 +1115,7 @@ void fps9(double x, double y, bool direction)
 		i += 1;
 	}
 	
-	//å¡«å……å³å¤å¤´
+	//Ìî³äÓÒÀ¤Í·
 	px = x+15; py = y;
 	i=1;
 	while(i < 5){
@@ -1126,7 +1126,7 @@ void fps9(double x, double y, bool direction)
 		i += 1;
 	}
 
-	//ç”»èƒŒå¸¦è£¤
+	//»­±³´ø¿ã
 	SetPenColor("DYellow");
 	SetPenSize(2);
 	MovePen(x - 5, y - kun_beidai_y);
@@ -1135,13 +1135,13 @@ void fps9(double x, double y, bool direction)
 	MovePen(x + 5, y - kun_beidai_y);
 	DrawLine(0,-15);
 
-	//ç”»å·¦æ‰‹
+	//»­×óÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);
 	MovePen(x - 10, y - 10);
 	DrawLine(-15, -10);
 
-	//ç¯®çƒ
+	//ÀºÇò
 	SetPenColor("Orange");
 	SetPenSize(1);
 	StartFilledRegion(1);
@@ -1149,29 +1149,29 @@ void fps9(double x, double y, bool direction)
 	DrawArc(5, 0, 360);
 	EndFilledRegion();
 
-	//ç”»å³æ‰‹
+	//»­ÓÒÊÖ
 	SetPenColor("Black");
 	SetPenSize(2);	
 	MovePen(x + 10, y - 10);
 	DrawLine(15, -10);
 
 	if(direction){
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15);
 	DrawLine(-7, -7);
 	DrawLine(7, -7);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15);
 	DrawLine(-5, -7);
 	DrawLine(5, -7);
 	}else{
-	//ç”»å·¦é¸¡è„š
+	//»­×ó¼¦½Å
 	MovePen(x - 6, y - kun_beidai_y - 15);
 	DrawLine(7, -7);
 	DrawLine(-7, -7);
 	
-	//ç”»å³é¸¡è„š
+	//»­ÓÒ¼¦½Å
 	MovePen(x + 6, y - kun_beidai_y - 15);
 	DrawLine(5, -7);
 	DrawLine(-5, -7);
@@ -1235,7 +1235,7 @@ void DrawStage(void)
 
 
 /*****************
-ç”»èœå•å‡½æ•°
+»­²Ëµ¥º¯Êı
 ******************/
 void DrawMenu()
 {
@@ -1243,7 +1243,7 @@ void DrawMenu()
 }
 
 /*****************
-ç”»æŒ‰é”®å‡½æ•°
+»­°´¼üº¯Êı
 ******************/
 void DrawButton()
 {
@@ -1251,7 +1251,7 @@ void DrawButton()
 }
 
 /*****************
-ç”»ç®±å­å‡½æ•°
+»­Ïä×Óº¯Êı
 ******************/
 void DrawBox()
 {
