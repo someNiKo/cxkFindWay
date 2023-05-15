@@ -16,7 +16,7 @@ BIN     = game.exe
 
 
 $(BIN): $(OBJ)
-	$(GCC) $(LINKOBJ) -o $(BIN) $(LIBS) -g 
+	$(GCC) $(LINKOBJ) -o $(BIN) $(LIBS) -g
 
 lib/main.o: main.c
 	$(GCC) -c main.c -o lib/main.o $(CFLAGS)

@@ -25,7 +25,11 @@ void DrawOneMenu(double x, double y, double high, char *color1, char *text, char
 double Mx, My;  //鼠标位置
 bool isMClick = 0;  //鼠标是否单击
 bool isMenuList1 = 0;  //第一个菜单列表是否展开
+bool isMenuList2 = 0;  //第二个菜单列表是否展开
+bool isMenuList3 = 0;  //第三个菜单列表是否展开
 bool MenuList1State[4] = {0};  //第一个菜单列表选项
+bool MenuList2State[4] = {0};  //第二个菜单列表选项
+bool MenuList3State = 0;  //第三个菜单列表选项
 
 
 /**************
@@ -1301,12 +1305,77 @@ void DrawMenu()
 
 
 	//绘制第二个列表菜单——“工具”
+	if(isInMenu(0, 830, 150) == 0){
+		DrawOneMenu(0, 830, 150, "MLPink", "工具", "White");
+	}else{
+		DrawOneMenu(0, 830, 150, "MDPink", "工具", "White");
+	}
+
+	//绘制“工具”菜单列表元素——“创建地图”、“编辑地图”、“保存地图”、“撤销”
+	if(isMClick && isMenuList2){
+		if(isInMenu(30, 800, 150)) MenuList2State[0] = 1;
+		if(isInMenu(60, 770, 150)) MenuList2State[1] = 1;
+		if(isInMenu(90, 740, 150)) MenuList2State[2] = 1;
+		if(isInMenu(120, 710, 150)) MenuList2State[3] = 1;
+		isMenuList2 = 0;
+	}
+
+	if(isInMenu(0, 830, 150) && isMClick){
+		DrawOneMenu(30, 800, 150, "MDPink", "创建地图", "Black");
+		DrawOneMenu(60, 770, 150, "MDPink", "编辑地图", "Black");
+		DrawOneMenu(90, 740, 150, "MDPink", "保存地图", "Black");
+		DrawOneMenu(120, 710, 150, "MDPink", "撤销", "Black");						
+		isMenuList2 = 1;
+	}
+
+	if(isMenuList2){
+		if(isInMenu(30, 800, 150) == 0){
+			DrawOneMenu(30, 800, 150, "MLPink", "创建地图", "Black");
+		}else{
+			DrawOneMenu(30, 800, 150, "MDPink", "创建地图", "Black");
+			DrawOneMenu(30, 650, 150, "MDPink", "CTRL+J", "Black");
+		}
+
+		if(isInMenu(60, 770, 150) == 0){
+			DrawOneMenu(60, 770, 150, "MLPink", "编辑地图", "Black");
+		}else{
+			DrawOneMenu(60, 770, 150, "MDPink", "编辑地图", "Black");
+			DrawOneMenu(60, 620, 150, "MDPink", "CTRL+K", "Black");			
+		}
+
+		if(isInMenu(90, 740, 150) == 0){
+			DrawOneMenu(90, 740, 150, "MLPink", "保存地图", "Black");
+		}else{
+			DrawOneMenu(90, 740, 150, "MDPink", "保存地图", "Black");
+			DrawOneMenu(90, 590, 150, "MDPink", "CTRL+S", "Black");
+		}					
 	
+		if(isInMenu(120, 710, 150) == 0){
+			DrawOneMenu(120, 710, 150, "MLPink", "撤销", "Black");
+		}else{
+			DrawOneMenu(120, 710, 150, "MDPink", "撤销", "Black");
+			DrawOneMenu(120, 560, 150, "MDPink", "CTRL+Z", "Black");			
+		}	
+	}
+
+	//绘制第二个列表菜单——“工具”
+	if(isInMenu(0, 680, 150) == 0){
+		DrawOneMenu(0, 680, 150, "MLPink", "帮助", "White");
+	}else{
+		DrawOneMenu(0, 680, 150, "MDPink", "帮助", "White");
+		DrawOneMenu(30, 650, 150, "MDPink", "CTRL+H", "White");
+	}
+
+	if(isMClick && isInMenu(0, 680, 150)){
+		MenuList3State = 1;
+	}					
 
 	return;
 }
 
-
+/****************
+是否在某菜单选项内
+*****************/
 bool isInMenu(double x, double y, double high)
 {
 	if(Mx >= x && Mx <= x + 30 && My >= -1*(Mx - x) + y - high && My <= -1*(Mx - x) + y){
@@ -1316,11 +1385,17 @@ bool isInMenu(double x, double y, double high)
 	}
 }
 
+/*******************
+试图做一个插值函数用于动画
+*******************/
 double MovingY(double y1, double y2, int t)
 {
 	return 0;
 }
 
+/*****************
+绘制一个菜单选项
+******************/
 void DrawOneMenu(double x, double y, double high, char *color, char *text, char *color2)
 {
 	//画方块
@@ -1373,24 +1448,6 @@ void DrawOneMenu(double x, double y, double high, char *color, char *text, char 
 	}
 	return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*****************
 画按键函数

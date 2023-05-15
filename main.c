@@ -95,6 +95,8 @@ static bool isCtrl = 0;
 extern double Mx, My;
 extern bool isMClick;
 extern bool MenuList1State[4];
+extern bool MenuList2State[4];
+extern bool MenuList3State;
 
 typedef enum{
     FPS,
@@ -118,7 +120,7 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-	//InitConsole();
+	InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -174,9 +176,15 @@ void KeyboardEventProcess(int key,int event)
 				case VK_s:
 				case VK_S:
 				case VK_DOWN:
-					KUN.x = KUN.x;
-					KUN.y = KUN.y - KUN.MOVE;
-					isKUN_a = 1;
+					if(!isCtrl){
+						KUN.x = KUN.x;
+						KUN.y = KUN.y - KUN.MOVE;
+						isKUN_a = 1;
+					}else{
+						if(key != VK_DOWN){
+							if(isCtrl) MenuList2State[2] = 1;
+						}
+					}					
 					break;
 				case VK_d:
 				case VK_D:
@@ -202,6 +210,22 @@ void KeyboardEventProcess(int key,int event)
 				case VK_o:
 					if(isCtrl) MenuList1State[3] = 1;
 					break;
+				case VK_J:
+				case VK_j:
+					if(isCtrl) MenuList2State[0] = 1;
+					break;
+				case VK_K:
+				case VK_k:
+					if(isCtrl) MenuList2State[1] = 1;
+					break;
+				case VK_Z:
+				case VK_z:
+					if(isCtrl) MenuList2State[3] = 1;
+					break;
+				case VK_H:
+				case VK_h:
+					if(isCtrl) MenuList3State = 1;
+					break;													
 				case VK_CONTROL:
 					isCtrl = 1;
 				
@@ -215,6 +239,7 @@ void KeyboardEventProcess(int key,int event)
 	}
 
     display();
+	return;
 }
 
 /********************
@@ -251,7 +276,7 @@ void MouseEventProcess(int x, int y, int button, int event)
 	default:
 		break;
 	}
-	
+	return;
 }
 
 /********************
@@ -292,6 +317,7 @@ void TimerEventProcess(int timerID)
 	default:
         break;
     }
+	return;
 }
 
 
@@ -322,6 +348,6 @@ void display()
 	SetFont("文道机械黑");
 	string a = "偶像练习生";
 	DrawTextString(a);
-	
+	printf("%d\n", MenuList3State);
 	return;
 }
