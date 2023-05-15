@@ -82,8 +82,19 @@ static struct kun{
 	bool direction;
 }KUN = {0, 0, 1, 0, 0};
 
+typedef struct box{
+	double x;  //一个格子的横坐标
+	double y;  //一个格子的纵坐标（左下角坐标）
+	int state;  //这个格子的状态：0是空 1是障碍 2是待编辑
+} BOX;
+
 static bool isKUN_a = 0;
 static bool fps_flag = 1;
+static bool isCtrl = 0;
+
+extern double Mx, My;
+extern bool isMClick;
+extern bool MenuList1State[4];
 
 typedef enum{
     FPS,
@@ -126,6 +137,8 @@ void Main()
 	DefineColor("MCyan", .63, .86, .95);
 	DefineColor("Wood", .74, .69, .68);
 	DefineColor("Face", .87, .73, .75);
+	DefineColor("MLPink", .95, .68, .625);
+	DefineColor("MDPink", .95, .65, .625);
 
 	//初始化坤的坐标
 	KUN.x = screen_x/2;
@@ -172,12 +185,32 @@ void KeyboardEventProcess(int key,int event)
 					KUN.y = KUN.y;
 					isKUN_a = 1;
 					KUN.direction = 0;
-					break;				
+					break;
+				case VK_N:
+				case VK_n:
+					if(isCtrl) MenuList1State[0] = 1;
+					break;
+				case VK_M:
+				case VK_m:
+					if(isCtrl) MenuList1State[1] = 1;
+					break;
+				case VK_I:
+				case VK_i:
+					if(isCtrl) MenuList1State[2] = 1;
+					break;
+				case VK_O:
+				case VK_o:
+					if(isCtrl) MenuList1State[3] = 1;
+					break;
+				case VK_CONTROL:
+					isCtrl = 1;
+				
 			}
 			break;
 		case KEY_UP:
 			isKUN_a = 0;
 			KUN.MOVE = 1;
+			isCtrl = 0;
 			break;
 	}
 
@@ -197,7 +230,27 @@ void CharEventProcess(char c)
 **********************/
 void MouseEventProcess(int x, int y, int button, int event)
 {
-
+	Mx = ScaleXInches(x);
+	My = ScaleYInches(y);
+	switch (event)
+	{
+	case BUTTON_DOWN:
+		switch (button)
+		{
+		case LEFT_BUTTON:
+			isMClick = 1;
+			break;
+		
+		default:
+			break;
+		}
+		break;
+	case BUTTON_UP:
+		isMClick = 0;
+		break;
+	default:
+		break;
+	}
 	
 }
 
@@ -256,7 +309,10 @@ void display()
 	//画舞台
 	DrawStage();
     
-    //画坤
+    //画菜单
+	DrawMenu();
+	
+	//画坤
     DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 
 	//字
@@ -266,4 +322,6 @@ void display()
 	SetFont("文道机械黑");
 	string a = "偶像练习生";
 	DrawTextString(a);
+	
+	return;
 }

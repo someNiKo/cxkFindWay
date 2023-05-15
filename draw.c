@@ -1,8 +1,11 @@
 #include "include/draw.h"
 #include <math.h>
+#include <string.h>
 
 #define PI acos(-1)
 #define kun_beidai_y 5*tan(PI/3)
+#define TextCW TextStringWidth("啊")
+#define TextEW TextStringWidth("A")
 
 //坤动画的10帧
 void fps0(double x, double y, bool direction);
@@ -15,6 +18,14 @@ void fps6(double x, double y, bool direction);
 void fps7(double x, double y, bool direction);
 void fps8(double x, double y, bool direction);
 void fps9(double x, double y, bool direction);
+bool isInMenu(double x, double y, double high);
+double MovingY(double y1, double y2, int t);
+void DrawOneMenu(double x, double y, double high, char *color1, char *text, char *color2);
+
+double Mx, My;  //鼠标位置
+bool isMClick = 0;  //鼠标是否单击
+bool isMenuList1 = 0;  //第一个菜单列表是否展开
+bool MenuList1State[4] = {0};  //第一个菜单列表选项
 
 
 /**************
@@ -56,7 +67,8 @@ void DrawKUN(double x, double y, int fps, bool direction)
 		break;
 	default:
 		break;
-	}	
+	}
+	return;	
 }
 
 void fps0(double x, double y, bool direction)
@@ -162,7 +174,7 @@ void fps0(double x, double y, bool direction)
 	DrawLine(5, -7);
 	DrawLine(-5, -7);
 	}
-
+	return;
 }
 
 void fps1(double x, double y, bool direction)
@@ -267,7 +279,8 @@ void fps1(double x, double y, bool direction)
 	MovePen(x + 6, y - kun_beidai_y - 15 - 1);
 	DrawLine(6, -6.5);
 	DrawLine(-6, -6.5);
-	}	
+	}
+	return;	
 }
 
 void fps2(double x, double y, bool direction)
@@ -385,6 +398,7 @@ void fps2(double x, double y, bool direction)
 	DrawLine(9, -6);
 	DrawLine(-9, -6);
 	}
+	return;
 }
 
 void fps3(double x, double y, bool direction)
@@ -502,6 +516,7 @@ void fps3(double x, double y, bool direction)
 	DrawLine(10, -5.5);
 	DrawLine(-9, -5.5);
 	}
+	return;
 }
 
 void fps4(double x, double y, bool direction)
@@ -621,6 +636,7 @@ void fps4(double x, double y, bool direction)
 	DrawLine(11, -5);
 	DrawLine(-9, -5);
 	}
+	return;
 }
 
 void fps5(double x, double y, bool direction)
@@ -736,6 +752,7 @@ void fps5(double x, double y, bool direction)
 	DrawLine(11, -5);
 	DrawLine(-9, -5);	
 	}
+	return;
 }
 
 void fps6(double x, double y, bool direction)
@@ -851,6 +868,7 @@ void fps6(double x, double y, bool direction)
 	DrawLine(10, -5.5);
 	DrawLine(-9, -5.5);
 	}
+	return;
 }
 
 void fps7(double x, double y, bool direction)
@@ -966,6 +984,7 @@ void fps7(double x, double y, bool direction)
 	DrawLine(9, -6);
 	DrawLine(-9, -6);
 	}
+	return;
 }
 
 void fps8(double x, double y, bool direction)
@@ -1071,6 +1090,7 @@ void fps8(double x, double y, bool direction)
 	DrawLine(6, -6.5);
 	DrawLine(-6, -6.5);
 	}
+	return;
 }
 
 void fps9(double x, double y, bool direction)
@@ -1176,6 +1196,7 @@ void fps9(double x, double y, bool direction)
 	DrawLine(5, -7);
 	DrawLine(-5, -7);
 	}
+	return;
 }
 
 
@@ -1211,23 +1232,8 @@ void DrawStage(void)
 	DrawLine(-1920, 0);
 	DrawLine(0, 200);
 	EndFilledRegion();
-
+	return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1239,8 +1245,152 @@ void DrawStage(void)
 ******************/
 void DrawMenu()
 {
+	//绘制第一个菜单列表——“游戏”
+	if(isInMenu(0, 980, 150) == 0){
+		DrawOneMenu(0, 980, 150, "MLPink", "游戏", "White");
+	}else{
+		DrawOneMenu(0, 980, 150, "MDPink", "游戏", "White");
+	}
+	
+	//绘制“游戏”菜单列表元素——“新的开始”、“重新开始”、“保存游戏”、“打开存档”
+	if(isMClick && isMenuList1){
+		if(isInMenu(30, 950, 150)) MenuList1State[0] = 1;
+		if(isInMenu(60, 920, 150)) MenuList1State[1] = 1;
+		if(isInMenu(90, 890, 150)) MenuList1State[2] = 1;
+		if(isInMenu(120, 860, 150)) MenuList1State[3] = 1;
+		isMenuList1 = 0;
+	}
 
+	if(isInMenu(0, 980, 150) && isMClick){
+		DrawOneMenu(30, 950, 150, "MDPink", "新的开始", "Black");
+		DrawOneMenu(60, 920, 150, "MDPink", "重新开始", "Black");
+		DrawOneMenu(90, 890, 150, "MDPink", "保存游戏", "Black");
+		DrawOneMenu(120, 860, 150, "MDPink", "打开存档", "Black");						
+		isMenuList1 = 1;
+	}
+	
+	if(isMenuList1){
+		if(isInMenu(30, 950, 150) == 0){
+			DrawOneMenu(30, 950, 150, "MLPink", "新的开始", "Black");
+		}else{
+			DrawOneMenu(30, 950, 150, "MDPink", "新的开始", "Black");
+			DrawOneMenu(30, 800, 150, "MDPink", "CTRL+N", "Black");
+		}
+
+		if(isInMenu(60, 920, 150) == 0){
+			DrawOneMenu(60, 920, 150, "MLPink", "重新开始", "Black");
+		}else{
+			DrawOneMenu(60, 920, 150, "MDPink", "重新开始", "Black");
+			DrawOneMenu(60, 770, 150, "MDPink", "CTRL+M", "Black");			
+		}
+
+		if(isInMenu(90, 890, 150) == 0){
+			DrawOneMenu(90, 890, 150, "MLPink", "保存游戏", "Black");
+		}else{
+			DrawOneMenu(90, 890, 150, "MDPink", "保存游戏", "Black");
+			DrawOneMenu(90, 740, 150, "MDPink", "CTRL+I", "Black");
+		}					
+	
+		if(isInMenu(120, 860, 150) == 0){
+			DrawOneMenu(120, 860, 150, "MLPink", "打开存档", "Black");
+		}else{
+			DrawOneMenu(120, 860, 150, "MDPink", "打开存档", "Black");
+			DrawOneMenu(120, 710, 150, "MDPink", "CTRL+O", "Black");			
+		}	
+	}
+
+
+	//绘制第二个列表菜单——“工具”
+	
+
+	return;
 }
+
+
+bool isInMenu(double x, double y, double high)
+{
+	if(Mx >= x && Mx <= x + 30 && My >= -1*(Mx - x) + y - high && My <= -1*(Mx - x) + y){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+double MovingY(double y1, double y2, int t)
+{
+	return 0;
+}
+
+void DrawOneMenu(double x, double y, double high, char *color, char *text, char *color2)
+{
+	//画方块
+	StartFilledRegion(1);	
+	SetPenSize(1);
+	SetPenColor(color);
+	MovePen(x, y);
+	DrawLine(30, -30);
+	DrawLine(0, -1 * high);
+	DrawLine(-30, 30);
+	DrawLine(0, high);	
+	EndFilledRegion();
+
+	//画边框
+	SetPenSize(3);
+	SetPenColor("White");
+	MovePen(x, y);
+	DrawLine(30, -30);
+	DrawLine(0, -1 * high);
+	DrawLine(-30, 30);
+	DrawLine(0, high);	
+
+	if(*text == 'C'){
+		//写英文
+		int n = strlen(text);
+		char s[2] = {'\0', '\0'};
+		char *p = text;
+		SetPenColor(color2);
+		SetPointSize(20);
+		SetFont("Stencil");
+		for(int i = 1; i <= n; i++){
+			s[0] = p[i - 1];
+			MovePen(x + 15 - TextEW / 2, y - high / 2 + n / 2 * (TextEW + 3) - i * (TextEW + 3) - 15);
+			DrawTextString(s);
+		}
+	}else{
+		//写中文
+		int n = strlen(text) / 2;  //获取字符串长度
+		char s[3] = {'\0', '\0', '\0'};
+		char *p = text;
+		SetPenColor(color2);
+		SetPointSize(20);
+		SetFont("千图小兔体");
+		for(int i = 1; i <= n; i++){
+			s[0] = p[2 * (i - 1)];
+			s[1] = p[2 * (i - 1) + 1];
+			MovePen(x + 15 - TextCW / 2, y - high / 2 + n / 2 * TextCW - i * TextCW - 15);
+			DrawTextString(s);
+		}	
+	}
+	return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*****************
 画按键函数
