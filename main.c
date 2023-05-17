@@ -88,39 +88,60 @@ typedef struct box{
 	int state;  //这个格子的状态：0是空 1是障碍 2是待编辑
 } BOX;
 
-static bool isKUN_a = 0;
-static bool fps_flag = 1;
-static bool isCtrl = 0;
+typedef enum{
+    FPS,
+    KUN_a,
+	FPS_ALL,
+	FLASH,
+} Mytimer;
+
+static bool isKUN_a = 0;  //坤是否可以加速
+static bool fps_flag = 1;  //坤动画重播标志
+static bool isCtrl = 0;  //ctrl键是否被按下
+static bool canKUNmove = 1;  //坤可以动吗？
+static bool canKUNdisplay = 1;  //drawKUN函数是否可以被调用
+
+//来自draw.c
 
 extern double Mx, My;
 extern bool isMClick;
 extern bool MenuList1State[4];
 extern bool MenuList2State[4];
 extern bool MenuList3State;
+extern bool isFlash;
 
-typedef enum{
-    FPS,
-    KUN_a,
-	FPS_ALL,
-} Mytimer;
+//消息回调函数声明
 
 void KeyboardEventProcess(int key,int event);
 void CharEventProcess(char c);
 void MouseEventProcess(int x, int y, int button, int event);
 void TimerEventProcess(int timerID);
 
+//画图函数声明
+
 void display();
 
 void DrawMenu();
-void DrawButton();
 void DrawBox();
+
+//菜单功能函数声明
+
+void menu1fun1();
+void menu1fun2();
+void menu1fun3();
+void menu1fun4();
+void menu2fun1();
+void menu2fun2();
+void menu2fun3();
+void menu2fun4();
+void menu3fun1();
 
 void Main()
 {
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-	InitConsole();
+	//InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -133,6 +154,7 @@ void Main()
 	startTimer(FPS, 100);  //启动10fps/s计时器
 	startTimer(KUN_a, 200);  //启动加速度定时器
 	startTimer(FPS_ALL, 8);  //屏幕60帧定时器
+	startTimer(FLASH, 400);  //启动光标闪烁定时器
 
 	DefineColor("Purple", .6, .6, .95);
 	DefineColor("DYellow", 1, .76, 0);
@@ -161,22 +183,26 @@ void KeyboardEventProcess(int key,int event)
 				case VK_w:
 				case VK_W:
 				case VK_UP:
-					KUN.x = KUN.x;
-					KUN.y = KUN.y + KUN.MOVE;
-					isKUN_a = 1;
+					if(canKUNmove){
+						KUN.x = KUN.x;
+						KUN.y = KUN.y + KUN.MOVE;
+						isKUN_a = 1;
+					}
 					break;
 				case VK_a:
 				case VK_A:
 				case VK_LEFT:
-					KUN.x = KUN.x - KUN.MOVE;
-					KUN.y = KUN.y;
-					isKUN_a = 1;
-					KUN.direction = 1;
+					if(canKUNmove){
+						KUN.x = KUN.x - KUN.MOVE;
+						KUN.y = KUN.y;
+						isKUN_a = 1;
+						KUN.direction = 1;
+					}					
 					break;
 				case VK_s:
 				case VK_S:
 				case VK_DOWN:
-					if(!isCtrl){
+					if(!isCtrl && canKUNmove){
 						KUN.x = KUN.x;
 						KUN.y = KUN.y - KUN.MOVE;
 						isKUN_a = 1;
@@ -189,10 +215,12 @@ void KeyboardEventProcess(int key,int event)
 				case VK_d:
 				case VK_D:
 				case VK_RIGHT:
-					KUN.x = KUN.x + KUN.MOVE;
-					KUN.y = KUN.y;
-					isKUN_a = 1;
-					KUN.direction = 0;
+					if(canKUNmove){
+						KUN.x = KUN.x + KUN.MOVE;
+						KUN.y = KUN.y;
+						isKUN_a = 1;
+						KUN.direction = 0;
+					}					
 					break;
 				case VK_N:
 				case VK_n:
@@ -247,7 +275,7 @@ void KeyboardEventProcess(int key,int event)
 **********************/
 void CharEventProcess(char c)
 {
-    //display();
+	//display();
 }
 
 /********************
@@ -312,8 +340,12 @@ void TimerEventProcess(int timerID)
 			KUN.MOVE += 2;
 		}
 		break;
+	case FLASH:
+		isFlash = !isFlash;
+		break;		
 	case FPS_ALL:
-		display();    
+		display();
+		break;    
 	default:
         break;
     }
@@ -337,17 +369,110 @@ void display()
     
     //画菜单
 	DrawMenu();
+
+	//menulist1
+	if(MenuList1State[0]) menu1fun1();
+	if(MenuList1State[1]) menu1fun2();
+	if(MenuList1State[2]) menu1fun3();
+	if(MenuList1State[3]) menu1fun4();
+	
+	//menulist2
+	if(MenuList2State[0]) menu2fun1();
+	if(MenuList2State[1]) menu2fun2();
+	if(MenuList2State[2]) menu2fun3();
+	if(MenuList2State[3]) menu2fun4();
 	
 	//画坤
-    DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
+    if(canKUNdisplay) DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
+
 
 	//字
-	MovePen(300, 300);
+	/*MovePen(300, 300);
 	SetPenColor("Black");
 	SetPointSize(100);
-	SetFont("文道机械黑");
+	SetFont("千图小兔体");
 	string a = "偶像练习生";
-	DrawTextString(a);
-	printf("%d\n", MenuList3State);
+	DrawTextString(a);*/
 	return;
+}
+
+
+/*****************
+菜单列表一：1-新的开始
+*****************/
+void menu1fun1()  
+{
+	canKUNdisplay = 1;
+}
+
+/*****************
+菜单列表一：2-重新开始
+*****************/
+void menu1fun2()
+{
+	canKUNdisplay = 1;
+}
+
+/*****************
+菜单列表一：3-保存游戏
+*****************/
+void menu1fun3()
+{
+	
+}
+
+/*****************
+菜单列表一：4-打开存档
+*****************/
+void menu1fun4()
+{
+	
+}
+
+/*****************
+菜单列表二：1-创建地图
+*****************/
+void menu2fun1()
+{
+	canKUNdisplay = 0;
+	DrawMenu2fun1();
+	static bool isFinish = 0;
+
+
+
+	if(isFinish){
+		canKUNdisplay = 1;
+	}
+}
+
+/*****************
+菜单列表二：2-编辑地图
+*****************/
+void menu2fun2()
+{
+	canKUNdisplay = 0;
+}
+
+/*****************
+菜单列表二：3-保存地图
+*****************/
+void menu2fun3()
+{
+	
+}
+
+/*****************
+菜单列表二：4-撤销
+*****************/
+void menu2fun4()
+{
+	
+}
+
+/*****************
+菜单列表三：1-帮助
+*****************/
+void menu3fun1()
+{
+	
 }

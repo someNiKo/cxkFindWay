@@ -26,8 +26,8 @@
 void DrawKUN(double x, double y, int fps, bool direction);
 void DrawStage(void);
 void DrawMenu();
-void DrawButton();
 void DrawBox();
+int DrawMenu2fun1();
 
 
 

@@ -18,9 +18,14 @@ void fps6(double x, double y, bool direction);
 void fps7(double x, double y, bool direction);
 void fps8(double x, double y, bool direction);
 void fps9(double x, double y, bool direction);
+
 bool isInMenu(double x, double y, double high);
 double MovingY(double y1, double y2, int t);
 void DrawOneMenu(double x, double y, double high, char *color1, char *text, char *color2);
+
+bool isInButton(double x, double y, double width, double high);
+bool DrawOneButton(double x, double y, double width, double high, int pointsize, char *color, 
+									char *color1, char *text, char *color2, bool _is, int ID);
 
 double Mx, My;  //鼠标位置
 bool isMClick = 0;  //鼠标是否单击
@@ -30,6 +35,8 @@ bool isMenuList3 = 0;  //第三个菜单列表是否展开
 bool MenuList1State[4] = {0};  //第一个菜单列表选项
 bool MenuList2State[4] = {0};  //第二个菜单列表选项
 bool MenuList3State = 0;  //第三个菜单列表选项
+
+bool isFlash = 0;
 
 
 /**************
@@ -1449,13 +1456,100 @@ void DrawOneMenu(double x, double y, double high, char *color, char *text, char 
 	return;
 }
 
-/*****************
-画按键函数
-******************/
-void DrawButton()
-{
 
+int DrawMenu2fun1()
+{
+	DrawOneButton(500, 500, 200, 40, 20, "MDPink", "MLPink", "确认", "White", 1, 0);
+	return 0;
 }
+
+
+
+/*****************
+画一个按钮
+******************/
+bool DrawOneButton(double x, double y, double width, double high, int pointsize, char *color, 
+									char *color1, char *text, char *color2, bool _is, int ID)
+{
+	//画背景	
+	if(isInButton(x, y, width, high)){
+		StartFilledRegion(1);	
+		SetPenSize(1);
+		SetPenColor(color1);
+		MovePen(x, y);
+		DrawLine(width, 0);
+		DrawLine(0, high);
+		DrawLine(-1 * width, 0);
+		DrawLine(0, -1 * high);	
+		EndFilledRegion();		
+	}else{
+		StartFilledRegion(1);	
+		SetPenSize(1);
+		SetPenColor(color);
+		MovePen(x, y);
+		DrawLine(width, 0);
+		DrawLine(0, high);
+		DrawLine(-1 * width, 0);
+		DrawLine(0, -1 * high);	
+		EndFilledRegion();
+	}
+
+	if(_is){
+		char puttext[100] = {'\0'};
+		char *p = puttext;
+		int n = strlen(text);
+		strcpy(puttext, text);
+		static bool isFlashing[10] = {1};
+		if(isInButton(x, y, width, high) && isMClick){
+			isFlashing[ID] = 1;
+		}
+		if((!isInButton(x, y, width, high)) && isMClick){
+			isFlashing[ID] = 0;
+		}
+		if(isFlashing[ID]){
+			if(isFlash){
+				*(p + n) = '_';
+				*(p + n + 1) = '\0'; 
+			}else{
+				*(p + n) = ' ';
+				*(p + n + 1) = '\0';
+			}
+		}
+		double w = TextStringWidth(puttext);
+		SetPenColor(color2);
+		SetPointSize(pointsize);
+		SetFont("千图小兔体");
+		MovePen(x + (width - w) / 2, y + (high - TextCW) / 2);
+		DrawTextString(puttext);
+		return 1;
+	}else{
+		double w = TextStringWidth(text);
+		SetPenColor(color2);
+		SetPointSize(pointsize);
+		SetFont("千图小兔体");
+		MovePen(x + (width - w) / 2, y + (high - TextCW) / 2);
+		DrawTextString(text);
+		if(isInButton(x, y, width, high) && isMClick){
+			return 0;
+		}else{
+			return 1;
+		}
+	}
+}
+
+/******************
+是否在按钮内
+*******************/
+bool isInButton(double x, double y, double width, double high)
+{
+	if(Mx >= x && My >= y && Mx <= x + width && My <= y + high) return 1;
+	else return 0;
+}
+
+
+
+
+
 
 /*****************
 画箱子函数
