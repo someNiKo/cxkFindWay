@@ -101,7 +101,7 @@ static bool isCtrl = 0;  //ctrl键是否被按下
 static bool canKUNmove = 1;  //坤可以动吗？
 static bool canKUNdisplay = 1;  //drawKUN函数是否可以被调用
 
-//来自draw.c
+//来自draw.c:
 
 extern double Mx, My;
 extern bool isMClick;
@@ -109,6 +109,14 @@ extern bool MenuList1State[4];
 extern bool MenuList2State[4];
 extern bool MenuList3State;
 extern bool isFlash;
+
+//传送给draw.c:
+char mapx[10] = "宽度:";
+char mapy[10] = "高度:";
+
+//地图长宽
+int nowMapx;
+int nowMapy;
 
 //消息回调函数声明
 
@@ -275,7 +283,20 @@ void KeyboardEventProcess(int key,int event)
 **********************/
 void CharEventProcess(char c)
 {
-	//display();
+	/*if(canEdit){
+		int nx = strlen(mapx);
+		int x = 0, y = 0;
+		char *px = mapx;
+		if(c >= '0' && c <= '9'){
+			*(px + nx) = c;
+			*(px + nx +1) = '\0';
+		}
+		for(int i = 6; *(px + i) != '\0'; i++){
+			x = x * 10 + *(px + i) - '0';
+		}
+		nowMapx = x; 
+	}*/
+
 }
 
 /********************
@@ -385,7 +406,6 @@ void display()
 	//画坤
     if(canKUNdisplay) DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 
-
 	//字
 	/*MovePen(300, 300);
 	SetPenColor("Black");
@@ -435,13 +455,22 @@ void menu1fun4()
 void menu2fun1()
 {
 	canKUNdisplay = 0;
-	DrawMenu2fun1();
 	static bool isFinish = 0;
-
-
+	switch (DrawMenu2fun1())
+	{
+	case 0:
+		isFinish = 1;
+		break;
+	case 1:
+		isFinish = 1;
+	default:
+		break;
+	}
 
 	if(isFinish){
 		canKUNdisplay = 1;
+		MenuList2State[0] = 0;
+		isFinish = 0;
 	}
 }
 

@@ -25,7 +25,7 @@ void DrawOneMenu(double x, double y, double high, char *color1, char *text, char
 
 bool isInButton(double x, double y, double width, double high);
 bool DrawOneButton(double x, double y, double width, double high, int pointsize, char *color, 
-									char *color1, char *text, char *color2, bool _is, int ID);
+									char *color1, char *text, char *color2, bool isEditing, int ID);
 
 double Mx, My;  //鼠标位置
 bool isMClick = 0;  //鼠标是否单击
@@ -36,7 +36,12 @@ bool MenuList1State[4] = {0};  //第一个菜单列表选项
 bool MenuList2State[4] = {0};  //第二个菜单列表选项
 bool MenuList3State = 0;  //第三个菜单列表选项
 
-bool isFlash = 0;
+bool isFlash = 1;
+bool isFlashing[10] = {TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};
+
+//来自于main.c:
+extern char mapx[10];
+extern char mapy[10];
 
 
 /**************
@@ -1459,8 +1464,14 @@ void DrawOneMenu(double x, double y, double high, char *color, char *text, char 
 
 int DrawMenu2fun1()
 {
-	DrawOneButton(500, 500, 200, 40, 20, "MDPink", "MLPink", "确认", "White", 1, 0);
-	return 0;
+	if(DrawOneButton(500, 70, 200, 40, 20, "MDPink", "MLPink", "确定", "White", 0, 0) == 0){
+		return 0;
+	}
+	if(DrawOneButton(1220, 70, 200, 40, 20, "MDPink", "MLPink", "取消", "White", 0, 0) == 0){
+		return 1;
+	}
+	DrawOneButton(1500, 888, 200, 40, 20, "MDPink", "MLPink", mapx, "White", 1, 0);
+	return 5;
 }
 
 
@@ -1469,7 +1480,7 @@ int DrawMenu2fun1()
 画一个按钮
 ******************/
 bool DrawOneButton(double x, double y, double width, double high, int pointsize, char *color, 
-									char *color1, char *text, char *color2, bool _is, int ID)
+									char *color1, char *text, char *color2, bool isEditing, int ID)
 {
 	//画背景	
 	if(isInButton(x, y, width, high)){
@@ -1494,14 +1505,16 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 		EndFilledRegion();
 	}
 
-	if(_is){
+	if(isEditing){
 		char puttext[100] = {'\0'};
 		char *p = puttext;
 		int n = strlen(text);
-		strcpy(puttext, text);
-		static bool isFlashing[10] = {1};
+		strcpy(puttext, text);	
 		if(isInButton(x, y, width, high) && isMClick){
 			isFlashing[ID] = 1;
+			return 1;
+		}else if(isMClick){
+			return 0;
 		}
 		if((!isInButton(x, y, width, high)) && isMClick){
 			isFlashing[ID] = 0;
@@ -1515,19 +1528,18 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 				*(p + n + 1) = '\0';
 			}
 		}
-		double w = TextStringWidth(puttext);
+		//double w = TextStringWidth(puttext);
 		SetPenColor(color2);
 		SetPointSize(pointsize);
 		SetFont("千图小兔体");
-		MovePen(x + (width - w) / 2, y + (high - TextCW) / 2);
+		MovePen(x + width/2 - strlen(puttext)*TextEW/2, y + (high - TextCW) / 2 + 5);
 		DrawTextString(puttext);
-		return 1;
 	}else{
 		double w = TextStringWidth(text);
 		SetPenColor(color2);
 		SetPointSize(pointsize);
 		SetFont("千图小兔体");
-		MovePen(x + (width - w) / 2, y + (high - TextCW) / 2);
+		MovePen(x + (width - w) / 2, y + (high - TextCW) / 2 + 5);
 		DrawTextString(text);
 		if(isInButton(x, y, width, high) && isMClick){
 			return 0;
