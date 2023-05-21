@@ -109,6 +109,7 @@ extern bool MenuList1State[4];
 extern bool MenuList2State[4];
 extern bool MenuList3State;
 extern bool isFlash;
+extern bool isFlashing[10];
 
 //传送给draw.c:
 char mapx[10] = "宽度:";
@@ -264,13 +265,36 @@ void KeyboardEventProcess(int key,int event)
 					break;													
 				case VK_CONTROL:
 					isCtrl = 1;
-				
+				case VK_DELETE:
+				case VK_BACK:
+					if(strlen(mapx) > 5 && isFlashing[0]){
+						char *p = mapx;
+						*(p + strlen(mapx) - 1) = '\0';
+						isFlashing[0] = 1;
+					}
+					if(strlen(mapy) > 5 && isFlashing[1]){
+						char *p = mapy;
+						*(p + strlen(mapy) - 1) = '\0';
+						isFlashing[1] = 1;
+					}
 			}
 			break;
 		case KEY_UP:
 			isKUN_a = 0;
 			KUN.MOVE = 1;
 			isCtrl = 0;
+			switch (key)
+			{
+				case VK_RETURN:
+					if(isFlashing[0]){
+						isFlashing[0] = 0;
+					}
+					if(isFlashing[1]){
+						isFlashing[1] = 0;
+					}					
+				default:
+					break;
+			}
 			break;
 	}
 
@@ -283,19 +307,35 @@ void KeyboardEventProcess(int key,int event)
 **********************/
 void CharEventProcess(char c)
 {
-	/*if(canEdit){
+	//删除和回车见KeyBoardEvent
+	if(isFlashing[0]){
+		//得到宽度
 		int nx = strlen(mapx);
-		int x = 0, y = 0;
+		int x = 0;
 		char *px = mapx;
 		if(c >= '0' && c <= '9'){
 			*(px + nx) = c;
 			*(px + nx +1) = '\0';
 		}
-		for(int i = 6; *(px + i) != '\0'; i++){
+		for(int i = 5; *(px + i) != '\0'; i++){
 			x = x * 10 + *(px + i) - '0';
 		}
-		nowMapx = x; 
-	}*/
+		nowMapx = x;
+	}
+	if(isFlashing[1]){
+		//得到高度
+		int ny = strlen(mapy);
+		int y = 0;
+		char *py = mapy;
+		if(c >= '0' && c <= '9'){
+			*(py + ny) = c;
+			*(py + ny +1) = '\0';
+		}
+		for(int i = 5; *(py + i) != '\0'; i++){
+			y = y * 10 + *(py + i) - '0';
+		}
+		nowMapy = y;		
+	}
 
 }
 
@@ -402,7 +442,7 @@ void display()
 	if(MenuList2State[1]) menu2fun2();
 	if(MenuList2State[2]) menu2fun3();
 	if(MenuList2State[3]) menu2fun4();
-	
+
 	//画坤
     if(canKUNdisplay) DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 
