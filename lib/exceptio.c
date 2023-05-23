@@ -57,7 +57,7 @@ static context_block *FindHandler(exception *e);
  * within the exception handler may fail.
  */
 
-void RaiseException(exception *e, string name, void *value)
+/*void RaiseException(exception *e, string name, void *value)
 {
     context_block *cb;
     char errbuf[MaxUnhandledMessage + 1];
@@ -85,7 +85,7 @@ void RaiseException(exception *e, string name, void *value)
     cb->value = value;
     cb->name = name;
     longjmp(cb->jmp, ES_Exception);
-}
+}*/
 
 /*
  * Function: HandlerExists

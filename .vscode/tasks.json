@@ -7,6 +7,7 @@
 			"command": "G:\\mingw64\\bin\\gcc.exe",
 			"args": [
 				"-fdiagnostics-color=always",
+				"-fopenmp",
 				"-g",
 				"G:/cxkFindWay/lib/exceptio.o",
 				"G:/cxkFindWay/lib/genlib.o",
@@ -25,6 +26,8 @@
 				"G:/mingw64/lib",
 				"-L",
 				"G:/mingw64/x86_64-w64-mingw32/lib",
+				"-L",
+				"G:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0",
 				"-static",
 				"-lgcc",
 				"-mwindows",

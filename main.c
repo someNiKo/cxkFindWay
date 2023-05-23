@@ -173,7 +173,7 @@ void Main()
 
 	startTimer(FPS, 100);  //启动10fps/s计时器
 	startTimer(KUN_a, 200);  //启动加速度定时器
-	startTimer(FPS_ALL, 8);  //屏幕60帧定时器
+	startTimer(FPS_ALL, 30);  //屏幕60帧定时器
 	startTimer(FLASH, 400);  //启动光标闪烁定时器
 
 	DefineColor("Purple", .6, .6, .95);
@@ -317,7 +317,7 @@ void KeyboardEventProcess(int key,int event)
 			break;
 	}
 
-    display();
+    //display();
 	return;
 }
 
@@ -411,7 +411,7 @@ void TimerEventProcess(int timerID)
 				KUN.fps -= 1;
 			}
 		}
-        display();
+        //display();
         break;
     case KUN_a:  //坤运动加速度的实现
 		if(isKUN_a == 1 && KUN.MOVE < 4){
@@ -469,12 +469,12 @@ void display()
     if(canKUNdisplay) DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 
 	//字
-	/*MovePen(300, 300);
+	/*MovePen(300, 540);
 	SetPenColor("Black");
-	SetPointSize(100);
-	SetFont("千图小兔体");
-	string a = "偶像练习生";
-	DrawTextString(a);*/
+	SetPenSize(1);
+	DrawLine(1000,0);
+	MovePen(960, 100);
+	DrawLine(0,900);*/
 	return;
 }
 

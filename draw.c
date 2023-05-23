@@ -1561,30 +1561,31 @@ void DrawBox()
 	double px, py;  //画笔坐标
 
 	//初始化画笔坐标
-	if(nowMapx / 2 == 0){
-		px = 1000 - nowMapx / 2 * width;
+	if(nowMapx % 2 == 0){
+		px = 960 - (nowMapx / 2) * width;
 	}else{
-		px = 1000 - nowMapx / 2 * width - width / 2;
+		px = 960 - (nowMapx / 2) * width - width / 2;
 	}
-	if(nowMapy / 2 == 0){
-		py = 580 - nowMapy / 2 * width;
+	if(nowMapy % 2 == 0){
+		py = 540 - (nowMapy / 2) * width;
 	}else{
-		py = 580 - nowMapy / 2 * width - width / 2;
+		py = 540 - (nowMapy / 2) * width - width / 2;
 	}
 
 	//利用画笔画地图
 	for(int i = nowMapy; i >= 1; i--){
+		#pragma omp for
 		for(int j = 1; j <= nowMapx; j++){
-			DrawOneBox(px, py, width, nowMap[j-1][i-1].state, 0);
+			DrawOneBox(px, py, width, nowMap[i-1][j-1].state, 0);
 			px += width;
 		}
 		//返回行首
-		if(nowMapx / 2 == 0){
-			px = 1000 - nowMapx / 2 * width;
+		if(nowMapx % 2 == 0){
+			px = 960 - nowMapx / 2 * width;
 		}else{
-			px = 1000 - nowMapx / 2 * width - width / 2;
+			px = 960 - nowMapx / 2 * width - width / 2;
 		}
-		py +=width;
+		py += width;
 	}
 }
 
@@ -1598,8 +1599,8 @@ bool DrawOneBox(double x, double y, double width, int state, bool isChoosing)
 	switch (state)
 	{
 	case 0:
-		if(isInBox(x, y, width) || isChoosing) color = "MGray1";
-		else color = "MGray2";
+		if(isInBox(x, y, width) || isChoosing) color = "MGray2";
+		else color = "MGray1";
 		break;
 	case 1:
 		if(isInBox(x, y, width) || isChoosing) color = "MGreen1";
@@ -1668,13 +1669,13 @@ int DrawMenu2fun1()
 	if(DrawOneButton(1220, 70, 200, 40, 20, "MDPink", "MLPink", "取消", "White", 0, 0) == 0){
 		return 1;  //单击了取消按钮
 	}
-	DrawOneButton(600, 330, 710, 40, 20, "MLPink", "MLPink", "（长度范围: 10~60    高度范围: 10~35）", "White", 0, 0);
+	DrawOneButton(600, 330, 710, 40, 20, "MLPink", "MLPink", "（长度范围: 10~30    高度范围: 10~20）", "White", 0, 0);
 	
 	if(isFlashing[0] == 0){
-		if(nowMapx > 60){
+		if(nowMapx > 30){
 			char *p = mapx;
-			nowMapx = 60;
-			*(p + 5) = '6';
+			nowMapx = 30;
+			*(p + 5) = '3';
 			*(p + 6) = '0';
 			*(p + 7) = '\0';
 		}else if(nowMapx < 10){
@@ -1686,11 +1687,11 @@ int DrawMenu2fun1()
 		}
 	}
 	if(isFlashing[1] == 0){
-		if(nowMapy > 35){
+		if(nowMapy > 20){
 			char *p = mapy;
-			nowMapy = 35;
-			*(p + 5) = '3';
-			*(p + 6) = '5';
+			nowMapy = 20;
+			*(p + 5) = '2';
+			*(p + 6) = '0';
 			*(p + 7) = '\0';
 		}else if(nowMapy < 10){
 			char *p = mapy;
