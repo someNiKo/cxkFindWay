@@ -28,6 +28,7 @@
         "find.h": "c",
         "istream": "c",
         "ostream": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "omp.h": "c"
     }
 }

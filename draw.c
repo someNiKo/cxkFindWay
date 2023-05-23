@@ -27,6 +27,9 @@ bool isInButton(double x, double y, double width, double high);
 bool DrawOneButton(double x, double y, double width, double high, int pointsize, char *color, 
 									char *color1, char *text, char *color2, bool isEditing, int ID);
 
+bool isInBox(double x, double y, double width);
+bool DrawOneBox(double x, double y, double width, int state, bool isChoosing);									
+
 double Mx, My;  //鼠标位置
 bool isMClick = 0;  //鼠标是否单击
 bool isMenuList1 = 0;  //第一个菜单列表是否展开
@@ -44,6 +47,7 @@ extern char mapx[10];
 extern char mapy[10];
 extern int nowMapx;
 extern int nowMapy;
+extern BOX nowMap[35][60];
 
 
 /**************
@@ -1464,71 +1468,6 @@ void DrawOneMenu(double x, double y, double high, char *color, char *text, char 
 }
 
 
-int DrawMenu2fun1()
-{
-	if(DrawOneButton(500, 70, 200, 40, 20, "MDPink", "MLPink", "确定", "White", 0, 0) == 0){
-		return 0;  //单击了确定按钮
-	}
-	if(DrawOneButton(1220, 70, 200, 40, 20, "MDPink", "MLPink", "取消", "White", 0, 0) == 0){
-		return 1;  //单击了取消按钮
-	}
-	DrawOneButton(600, 330, 680, 40, 20, "MLPink", "MLPink", "长度范围: 10~60    高度范围: 10~35", "White", 0, 0);
-	
-	if(isFlashing[0] == 0){
-		if(nowMapx > 60){
-			char *p = mapx;
-			nowMapx = 60;
-			*(p + 5) = '6';
-			*(p + 6) = '0';
-			*(p + 7) = '\0';
-		}else if(nowMapx < 10){
-			char *p = mapx;
-			nowMapx = 10;
-			*(p + 5) = '1';
-			*(p + 6) = '0';
-			*(p + 7) = '\0';			
-		}
-	}
-	if(isFlashing[1] == 0){
-		if(nowMapy > 35){
-			char *p = mapy;
-			nowMapy = 35;
-			*(p + 5) = '3';
-			*(p + 6) = '5';
-			*(p + 7) = '\0';
-		}else if(nowMapy < 10){
-			char *p = mapy;
-			nowMapy = 10;
-			*(p + 5) = '1';
-			*(p + 6) = '0';
-			*(p + 7) = '\0';			
-		}
-	}	
-
-	static int f = 0; 
-	if(DrawOneButton(600, 400, 230, 60, 28, "MDPink", "MLPink", mapx, "White", 1, 0) == 1){
-		f = 2;  //单击了输入框1
-	}
-	if(DrawOneButton(1080, 400, 230, 60, 28, "MDPink", "MLPink", mapy, "White", 1, 1) == 1){
-		f = 3;  //单击了输入框2
-	}	
-	
-	
-	switch (f)
-	{
-	case 2:
-		return 2;
-		break;
-	case 3:
-		return 3;
-	default:
-		break;
-	}
-	return 5;
-}
-
-
-
 /*****************
 画一个按钮
 ******************/
@@ -1613,14 +1552,171 @@ bool isInButton(double x, double y, double width, double high)
 }
 
 
-
-
-
-
 /*****************
 画箱子函数
 ******************/
 void DrawBox()
 {
-    
+    double width = min(1800 / nowMapx, 1050 / nowMapy);
+	double px, py;  //画笔坐标
+
+	//初始化画笔坐标
+	if(nowMapx / 2 == 0){
+		px = 1000 - nowMapx / 2 * width;
+	}else{
+		px = 1000 - nowMapx / 2 * width - width / 2;
+	}
+	if(nowMapy / 2 == 0){
+		py = 570 - nowMapy / 2 * width;
+	}else{
+		py = 570 - nowMapy / 2 * width - width / 2;
+	}
+
+	//利用画笔画地图
+	for(int i = nowMapy; i >= 1; i--){
+		for(int j = 1; j <= nowMapx; j++){
+			DrawOneBox(px, py, width, nowMap[j-1][i-1].state, 0);
+			px += width;
+		}
+		//返回行首
+		if(nowMapx / 2 == 0){
+			px = 1000 - nowMapx / 2 * width;
+		}else{
+			px = 1000 - nowMapx / 2 * width - width / 2;
+		}
+		py +=width;
+	}
+}
+
+/***************
+画一个箱子
+****************/
+bool DrawOneBox(double x, double y, double width, int state, bool isChoosing)
+{
+	//设置相应的颜色
+	char *color;
+	switch (state)
+	{
+	case 0:
+		if(isInBox(x, y, width) || isChoosing) color = "MGray1";
+		else color = "MGray2";
+		break;
+	case 1:
+		if(isInBox(x, y, width) || isChoosing) color = "MGreen1";
+		else color = "MGreen2";
+		break;
+	case 2:
+		if(isInBox(x, y, width) || isChoosing) color = "MYellow1";
+		else color = "MYellow2";
+		break;
+	case 3:
+		if(isInBox(x, y, width) || isChoosing) color = "MRed1";
+		else color = "MRed2";
+		break;
+	default:
+		break;
+	}
+
+	//绘制方块
+	StartFilledRegion(1);	
+	SetPenSize(1);
+	SetPenColor(color);
+	MovePen(x, y);
+	DrawLine(width, 0);
+	DrawLine(0, width);
+	DrawLine(-1 * width, 0);
+	DrawLine(0, -1 * width);	
+	EndFilledRegion();
+	//绘制边框	
+	if(isChoosing){
+		SetPenSize(1);
+		SetPenColor("Gray");
+		MovePen(x, y);
+		DrawLine(width, 0);
+		DrawLine(0, width);
+		DrawLine(-1 * width, 0);
+		DrawLine(0, -1 * width);
+	}else{
+		SetPenSize(1);
+		SetPenColor("MLPink");
+		MovePen(x, y);
+		DrawLine(width, 0);
+		DrawLine(0, width);
+		DrawLine(-1 * width, 0);
+		DrawLine(0, -1 * width);		
+	}
+	if(isInBox(x, y, width) && isMClick) return 1;
+	else return 0;			
+}
+
+/***************
+判断是否再箱子内
+***************/
+bool isInBox(double x, double y, double width)
+{
+	if(Mx >= x && Mx <= x + width && My >= y && My <= y + width) return 1;
+	else return 0;
+}
+
+int DrawMenu2fun1()
+{
+	if(DrawOneButton(500, 70, 200, 40, 20, "MDPink", "MLPink", "确定", "White", 0, 0) == 0){
+		return 0;  //单击了确定按钮
+	}
+	if(DrawOneButton(1220, 70, 200, 40, 20, "MDPink", "MLPink", "取消", "White", 0, 0) == 0){
+		return 1;  //单击了取消按钮
+	}
+	DrawOneButton(600, 330, 710, 40, 20, "MLPink", "MLPink", "（长度范围: 10~60    高度范围: 10~35）", "White", 0, 0);
+	
+	if(isFlashing[0] == 0){
+		if(nowMapx > 60){
+			char *p = mapx;
+			nowMapx = 60;
+			*(p + 5) = '6';
+			*(p + 6) = '0';
+			*(p + 7) = '\0';
+		}else if(nowMapx < 10){
+			char *p = mapx;
+			nowMapx = 10;
+			*(p + 5) = '1';
+			*(p + 6) = '0';
+			*(p + 7) = '\0';			
+		}
+	}
+	if(isFlashing[1] == 0){
+		if(nowMapy > 35){
+			char *p = mapy;
+			nowMapy = 35;
+			*(p + 5) = '3';
+			*(p + 6) = '5';
+			*(p + 7) = '\0';
+		}else if(nowMapy < 10){
+			char *p = mapy;
+			nowMapy = 10;
+			*(p + 5) = '1';
+			*(p + 6) = '0';
+			*(p + 7) = '\0';			
+		}
+	}	
+
+	static int f = 0; 
+	if(DrawOneButton(600, 400, 230, 60, 28, "MDPink", "MLPink", mapx, "White", 1, 0) == 1){
+		f = 2;  //单击了输入框1
+	}
+	if(DrawOneButton(1080, 400, 230, 60, 28, "MDPink", "MLPink", mapy, "White", 1, 1) == 1){
+		f = 3;  //单击了输入框2
+	}	
+	
+	
+	switch (f)
+	{
+	case 2:
+		return 2;
+		break;
+	case 3:
+		return 3;
+	default:
+		break;
+	}
+	return 5;
 }

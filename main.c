@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <time.h>
+#include <omp.h>  //openMP进行优化
 
 #include <windows.h>
 #include <olectl.h>
@@ -82,11 +83,8 @@ static struct kun{
 	bool direction;
 }KUN = {0, 0, 1, 0, 0};
 
-typedef struct box{
-	double x;  //一个格子的横坐标
-	double y;  //一个格子的纵坐标（左下角坐标）
-	int state;  //这个格子的状态：0是空 1是障碍 2是待编辑
-} BOX;
+BOX nowMap[35][60];  //当前地图
+BOX lastMap[35][60];  //上一个地图（用作撤销）
 
 typedef enum{
     FPS,
@@ -100,6 +98,7 @@ static bool fps_flag = 1;  //坤动画重播标志
 static bool isCtrl = 0;  //ctrl键是否被按下
 static bool canKUNmove = 1;  //坤可以动吗？
 static bool canKUNdisplay = 1;  //drawKUN函数是否可以被调用
+static bool canMapdisplay = 0;  //地图可以显示吗
 
 //来自draw.c:
 
@@ -155,6 +154,18 @@ void Main()
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
 
+	//初始化地图
+	for(int i = 0; i < 35; i++){
+		for(int j = 0; j < 60; j++){
+			nowMap[i][j].state = 0;
+			nowMap[i][j].y = i + 1;
+			nowMap[i][j].x = j + 1;
+			lastMap[i][j].state = 0;
+			lastMap[i][j].y = i + 1;
+			lastMap[i][j].x = j + 1;			
+		}
+	}
+
 	registerKeyboardEvent(KeyboardEventProcess);
 	registerCharEvent(CharEventProcess);
 	registerMouseEvent(MouseEventProcess);
@@ -168,10 +179,18 @@ void Main()
 	DefineColor("Purple", .6, .6, .95);
 	DefineColor("DYellow", 1, .76, 0);
 	DefineColor("MCyan", .63, .86, .95);
-	DefineColor("Wood", .74, .69, .68);
+	DefineColor("Wood", .85, .79, .77);
 	DefineColor("Face", .87, .73, .75);
 	DefineColor("MLPink", .95, .68, .625);
 	DefineColor("MDPink", .95, .65, .625);
+	DefineColor("MGray1", .9, .9, .9);
+	DefineColor("MGray2", .7, .7, .7);
+	DefineColor("MGreen1", .46, .98, .55);
+	DefineColor("MGreen2", .29, .61, .35);
+	DefineColor("MYellow1", 1, 1, .33);
+	DefineColor("MYellow2", 1, .8, .32);
+	DefineColor("MRed1", 1, .4, .3);
+	DefineColor("MRed2", .875, .16, .16);
 
 	//初始化坤的坐标
 	KUN.x = screen_x/2;
@@ -428,7 +447,10 @@ void display()
 	//画舞台
 	DrawStage();
     
-    //画菜单
+    //画地图
+	if(canMapdisplay) DrawBox();
+
+	//画菜单
 	DrawMenu();
 
 	//menulist1
@@ -442,7 +464,7 @@ void display()
 	if(MenuList2State[1]) menu2fun2();
 	if(MenuList2State[2]) menu2fun3();
 	if(MenuList2State[3]) menu2fun4();
-
+	
 	//画坤
     if(canKUNdisplay) DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 
@@ -463,6 +485,8 @@ void display()
 void menu1fun1()  
 {
 	canKUNdisplay = 1;
+	canMapdisplay = 1;
+	MenuList1State[0] = 0;  //只执行一次
 }
 
 /*****************
@@ -471,6 +495,8 @@ void menu1fun1()
 void menu1fun2()
 {
 	canKUNdisplay = 1;
+	canMapdisplay = 1;
+	MenuList1State[1] = 0;  //只执行一次
 }
 
 /*****************
@@ -495,6 +521,7 @@ void menu1fun4()
 void menu2fun1()
 {
 	canKUNdisplay = 0;
+	canMapdisplay = 0;
 	static bool isFinish = 0;
 	switch (DrawMenu2fun1())
 	{
@@ -502,6 +529,16 @@ void menu2fun1()
 		isFinish = 1;
 		break;
 	case 1:
+		nowMapx = 10;
+		char *p = mapx;
+		*(p + 5) = '1';
+		*(p + 6) = '0';
+		*(p + 7) = '\0';		
+		nowMapy = 10;
+		p = mapy;
+		*(p + 5) = '1';
+		*(p + 6) = '0';
+		*(p + 7) = '\0';		
 		isFinish = 1;
 	default:
 		break;
@@ -519,7 +556,9 @@ void menu2fun1()
 *****************/
 void menu2fun2()
 {
-	canKUNdisplay = 0;
+	canMapdisplay = 1;
+	canKUNdisplay = 1;
+	MenuList2State[1] = 0;
 }
 
 /*****************

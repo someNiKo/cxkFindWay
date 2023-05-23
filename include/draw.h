@@ -20,7 +20,11 @@
 #include <winuser.h>
 
 
-
+typedef struct box{
+	double x;  //一个格子的横坐标
+	double y;  //一个格子的纵坐标（左下角坐标）
+	int state;  //这个格子的状态：0是空 1是障碍 2是待编辑
+} BOX;
 
 
 void DrawKUN(double x, double y, int fps, bool direction);
