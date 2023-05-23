@@ -1567,9 +1567,9 @@ void DrawBox()
 		px = 1000 - nowMapx / 2 * width - width / 2;
 	}
 	if(nowMapy / 2 == 0){
-		py = 570 - nowMapy / 2 * width;
+		py = 580 - nowMapy / 2 * width;
 	}else{
-		py = 570 - nowMapy / 2 * width - width / 2;
+		py = 580 - nowMapy / 2 * width - width / 2;
 	}
 
 	//利用画笔画地图
@@ -1661,6 +1661,8 @@ bool isInBox(double x, double y, double width)
 int DrawMenu2fun1()
 {
 	if(DrawOneButton(500, 70, 200, 40, 20, "MDPink", "MLPink", "确定", "White", 0, 0) == 0){
+		if(isFlashing[0]) isFlashing[0] = 0;
+		if(isFlashing[1]) isFlashing[1] = 0;
 		return 0;  //单击了确定按钮
 	}
 	if(DrawOneButton(1220, 70, 200, 40, 20, "MDPink", "MLPink", "取消", "White", 0, 0) == 0){

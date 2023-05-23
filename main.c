@@ -111,12 +111,12 @@ extern bool isFlash;
 extern bool isFlashing[10];
 
 //传送给draw.c:
-char mapx[10] = "宽度:";
-char mapy[10] = "高度:";
+char mapx[10] = "宽度:10";
+char mapy[10] = "高度:10";
 
 //地图长宽
-int nowMapx;
-int nowMapy;
+int nowMapx = 10;
+int nowMapy = 10;
 
 //消息回调函数声明
 
