@@ -42,13 +42,15 @@ bool MenuList3State = 0;  //第三个菜单列表选项
 bool isFlash = 1;
 bool isFlashing[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+double mapStartX, mapStartY;  //地图绘制开始的坐标
+double width;  //地图一个箱子宽度
+
 //来自于main.c:
 extern char mapx[10];
 extern char mapy[10];
 extern int nowMapx;
 extern int nowMapy;
-extern BOX nowMap[35][60];
-
+extern BOX nowMap[20][30];
 
 /**************
 传入坤的坐标和方向
@@ -1471,18 +1473,18 @@ void DrawOneMenu(double x, double y, double high, char *color, char *text, char 
 /*****************
 画一个按钮
 ******************/
-bool DrawOneButton(double x, double y, double width, double high, int pointsize, char *color, 
+bool DrawOneButton(double x, double y, double Width, double high, int pointsize, char *color, 
 									char *color1, char *text, char *color2, bool isEditing, int ID)
 {
 	//画背景	
-	if(isInButton(x, y, width, high)){
+	if(isInButton(x, y, Width, high)){
 		StartFilledRegion(1);	
 		SetPenSize(1);
 		SetPenColor(color1);
 		MovePen(x, y);
-		DrawLine(width, 0);
+		DrawLine(Width, 0);
 		DrawLine(0, high);
-		DrawLine(-1 * width, 0);
+		DrawLine(-1 * Width, 0);
 		DrawLine(0, -1 * high);	
 		EndFilledRegion();		
 	}else{
@@ -1490,9 +1492,9 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 		SetPenSize(1);
 		SetPenColor(color);
 		MovePen(x, y);
-		DrawLine(width, 0);
+		DrawLine(Width, 0);
 		DrawLine(0, high);
-		DrawLine(-1 * width, 0);
+		DrawLine(-1 * Width, 0);
 		DrawLine(0, -1 * high);	
 		EndFilledRegion();
 	}
@@ -1502,10 +1504,10 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 		char *p = puttext;
 		int n = strlen(text);
 		strcpy(puttext, text);	
-		if(isInButton(x, y, width, high) && isMClick){
+		if(isInButton(x, y, Width, high) && isMClick){
 			isFlashing[ID] = 1;
 		}
-		if((!isInButton(x, y, width, high)) && isMClick){
+		if((!isInButton(x, y, Width, high)) && isMClick){
 			isFlashing[ID] = 0;
 		}
 		if(isFlashing[ID]){
@@ -1523,7 +1525,7 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 		SetFont("千图小兔体");
 		MovePen(x + TextEW, y + (high - TextCW) / 2 + 5);
 		DrawTextString(puttext);
-		if(isInButton(x, y, width, high) && isMClick){
+		if(isInButton(x, y, Width, high) && isMClick){
 			return 1;
 		}
 		return 0;
@@ -1532,9 +1534,9 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 		SetPenColor(color2);
 		SetPointSize(pointsize);
 		SetFont("千图小兔体");
-		MovePen(x + (width - w) / 2, y + (high - TextCW) / 2 + 5);
+		MovePen(x + (Width - w) / 2, y + (high - TextCW) / 2 + 5);
 		DrawTextString(text);
-		if(isInButton(x, y, width, high) && isMClick){
+		if(isInButton(x, y, Width, high) && isMClick){
 			return 0;
 		}else{
 			return 1;
@@ -1545,9 +1547,9 @@ bool DrawOneButton(double x, double y, double width, double high, int pointsize,
 /******************
 是否在按钮内
 *******************/
-bool isInButton(double x, double y, double width, double high)
+bool isInButton(double x, double y, double Width, double high)
 {
-	if(Mx >= x && My >= y && Mx <= x + width && My <= y + high) return 1;
+	if(Mx >= x && My >= y && Mx <= x + Width && My <= y + high) return 1;
 	else return 0;
 }
 
@@ -1557,23 +1559,27 @@ bool isInButton(double x, double y, double width, double high)
 ******************/
 void DrawBox()
 {
-    double width = min(1800 / nowMapx, 1050 / nowMapy);
+    width = min(1800 / nowMapx, 1050 / nowMapy);
 	double px, py;  //画笔坐标
 
 	//初始化画笔坐标
 	if(nowMapx % 2 == 0){
 		px = 960 - (nowMapx / 2) * width;
+		mapStartX = px;
 	}else{
 		px = 960 - (nowMapx / 2) * width - width / 2;
+		mapStartX = px;
 	}
 	if(nowMapy % 2 == 0){
 		py = 540 - (nowMapy / 2) * width;
+		mapStartY = py;
 	}else{
 		py = 540 - (nowMapy / 2) * width - width / 2;
-	}
+		mapStartY = py;
+	}	
 
 	//利用画笔画地图
-	for(int i = nowMapy; i >= 1; i--){
+	for(int i = 1; i <= nowMapy; i++){
 		#pragma omp for
 		for(int j = 1; j <= nowMapx; j++){
 			DrawOneBox(px, py, width, nowMap[i-1][j-1].state, 0);
@@ -1592,26 +1598,26 @@ void DrawBox()
 /***************
 画一个箱子
 ****************/
-bool DrawOneBox(double x, double y, double width, int state, bool isChoosing)
+bool DrawOneBox(double x, double y, double Width, int state, bool isChoosing)
 {
 	//设置相应的颜色
 	char *color;
 	switch (state)
 	{
-	case 0:
-		if(isInBox(x, y, width) || isChoosing) color = "MGray2";
+	case 0:  //空的
+		if(isInBox(x, y, Width) || isChoosing) color = "MGray2";
 		else color = "MGray1";
 		break;
-	case 1:
-		if(isInBox(x, y, width) || isChoosing) color = "MGreen1";
+	case 1:  //障碍
+		if(isInBox(x, y, Width) || isChoosing) color = "MGreen1";
 		else color = "MGreen2";
 		break;
-	case 2:
-		if(isInBox(x, y, width) || isChoosing) color = "MYellow1";
+	case 2:  //起点
+		if(isInBox(x, y, Width) || isChoosing) color = "MYellow1";
 		else color = "MYellow2";
 		break;
-	case 3:
-		if(isInBox(x, y, width) || isChoosing) color = "MRed1";
+	case 3:  //终点
+		if(isInBox(x, y, Width) || isChoosing) color = "MRed1";
 		else color = "MRed2";
 		break;
 	default:
@@ -1623,39 +1629,39 @@ bool DrawOneBox(double x, double y, double width, int state, bool isChoosing)
 	SetPenSize(1);
 	SetPenColor(color);
 	MovePen(x, y);
-	DrawLine(width, 0);
-	DrawLine(0, width);
-	DrawLine(-1 * width, 0);
-	DrawLine(0, -1 * width);	
+	DrawLine(Width, 0);
+	DrawLine(0, Width);
+	DrawLine(-1 * Width, 0);
+	DrawLine(0, -1 * Width);	
 	EndFilledRegion();
 	//绘制边框	
 	if(isChoosing){
 		SetPenSize(1);
 		SetPenColor("Gray");
 		MovePen(x, y);
-		DrawLine(width, 0);
-		DrawLine(0, width);
-		DrawLine(-1 * width, 0);
-		DrawLine(0, -1 * width);
+		DrawLine(Width, 0);
+		DrawLine(0, Width);
+		DrawLine(-1 * Width, 0);
+		DrawLine(0, -1 * Width);
 	}else{
 		SetPenSize(1);
 		SetPenColor("MLPink");
 		MovePen(x, y);
-		DrawLine(width, 0);
-		DrawLine(0, width);
-		DrawLine(-1 * width, 0);
-		DrawLine(0, -1 * width);		
+		DrawLine(Width, 0);
+		DrawLine(0, Width);
+		DrawLine(-1 * Width, 0);
+		DrawLine(0, -1 * Width);		
 	}
-	if(isInBox(x, y, width) && isMClick) return 1;
+	if(isInBox(x, y, Width) && isMClick) return 1;
 	else return 0;			
 }
 
 /***************
 判断是否再箱子内
 ***************/
-bool isInBox(double x, double y, double width)
+bool isInBox(double x, double y, double Width)
 {
-	if(Mx >= x && Mx <= x + width && My >= y && My <= y + width) return 1;
+	if(Mx >= x && Mx <= x + Width && My >= y && My <= y + Width) return 1;
 	else return 0;
 }
 

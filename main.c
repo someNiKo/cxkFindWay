@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <time.h>
+#include <math.h>
 #include <omp.h>  //openMP进行优化
 
 #include <windows.h>
@@ -83,8 +84,8 @@ static struct kun{
 	bool direction;
 }KUN = {0, 0, 1, 0, 0};
 
-BOX nowMap[35][60];  //当前地图
-BOX lastMap[35][60];  //上一个地图（用作撤销）
+BOX nowMap[20][30];  //当前地图
+BOX lastMap[20][30];  //上一个地图（用作撤销）
 
 typedef enum{
     FPS,
@@ -96,9 +97,9 @@ typedef enum{
 static bool isKUN_a = 0;  //坤是否可以加速
 static bool fps_flag = 1;  //坤动画重播标志
 static bool isCtrl = 0;  //ctrl键是否被按下
-static bool canKUNmove = 1;  //坤可以动吗？
 static bool canKUNdisplay = 1;  //drawKUN函数是否可以被调用
 static bool canMapdisplay = 0;  //地图可以显示吗
+static bool canKUNmove[4] = {1, 1, 1, 1};  //坤可以动吗？
 
 //来自draw.c:
 
@@ -110,6 +111,9 @@ extern bool MenuList3State;
 extern bool isFlash;
 extern bool isFlashing[10];
 
+extern double mapStartX, mapStartY;
+extern double width;
+
 //传送给draw.c:
 char mapx[10] = "宽度:10";
 char mapy[10] = "高度:10";
@@ -117,6 +121,8 @@ char mapy[10] = "高度:10";
 //地图长宽
 int nowMapx = 10;
 int nowMapy = 10;
+int startX, startY;  //起点坐标
+int endX, endY;  //终点坐标
 
 //消息回调函数声明
 
@@ -131,6 +137,8 @@ void display();
 
 void DrawMenu();
 void DrawBox();
+
+void KUNmoveJUDGE();
 
 //菜单功能函数声明
 
@@ -149,15 +157,16 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-	//InitConsole();
+	InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
 
 	//初始化地图
-	for(int i = 0; i < 35; i++){
-		for(int j = 0; j < 60; j++){
-			nowMap[i][j].state = 0;
+	for(int i = 0; i < 20; i++){
+		for(int j = 0; j < 30; j++){
+			if(i % 2 == 0) nowMap[i][j].state = 0;
+			else nowMap[i][j].state = 1;
 			nowMap[i][j].y = i + 1;
 			nowMap[i][j].x = j + 1;
 			lastMap[i][j].state = 0;
@@ -165,6 +174,9 @@ void Main()
 			lastMap[i][j].x = j + 1;			
 		}
 	}
+	nowMap[0][0].state = 2;
+	startX = 1;
+	startY = 1; 
 
 	registerKeyboardEvent(KeyboardEventProcess);
 	registerCharEvent(CharEventProcess);
@@ -196,7 +208,6 @@ void Main()
 	KUN.x = screen_x/2;
 	KUN.y = screen_y/2;
 	DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
-
 }
 
 
@@ -211,7 +222,7 @@ void KeyboardEventProcess(int key,int event)
 				case VK_w:
 				case VK_W:
 				case VK_UP:
-					if(canKUNmove){
+					if(canKUNmove[0]){
 						KUN.x = KUN.x;
 						KUN.y = KUN.y + KUN.MOVE;
 						isKUN_a = 1;
@@ -220,17 +231,17 @@ void KeyboardEventProcess(int key,int event)
 				case VK_a:
 				case VK_A:
 				case VK_LEFT:
-					if(canKUNmove){
+					if(canKUNmove[2]){
 						KUN.x = KUN.x - KUN.MOVE;
 						KUN.y = KUN.y;
 						isKUN_a = 1;
-						KUN.direction = 1;
-					}					
+					}
+					KUN.direction = 1;					
 					break;
 				case VK_s:
 				case VK_S:
 				case VK_DOWN:
-					if(!isCtrl && canKUNmove){
+					if(!isCtrl && canKUNmove[1]){
 						KUN.x = KUN.x;
 						KUN.y = KUN.y - KUN.MOVE;
 						isKUN_a = 1;
@@ -243,12 +254,12 @@ void KeyboardEventProcess(int key,int event)
 				case VK_d:
 				case VK_D:
 				case VK_RIGHT:
-					if(canKUNmove){
+					if(canKUNmove[3]){
 						KUN.x = KUN.x + KUN.MOVE;
 						KUN.y = KUN.y;
 						isKUN_a = 1;
-						KUN.direction = 0;
-					}					
+					}
+					KUN.direction = 0;					
 					break;
 				case VK_N:
 				case VK_n:
@@ -411,7 +422,6 @@ void TimerEventProcess(int timerID)
 				KUN.fps -= 1;
 			}
 		}
-        //display();
         break;
     case KUN_a:  //坤运动加速度的实现
 		if(isKUN_a == 1 && KUN.MOVE < 4){
@@ -425,6 +435,7 @@ void TimerEventProcess(int timerID)
 		break;		
 	case FPS_ALL:
 		display();
+		KUNmoveJUDGE();
 		break;    
 	default:
         break;
@@ -432,7 +443,55 @@ void TimerEventProcess(int timerID)
 	return;
 }
 
-
+/*************
+判断坤是否可移动
+**************/
+void KUNmoveJUDGE(){
+	if(canMapdisplay){
+		//坐标变换
+		int X, Y;
+		X = (int)((KUN.x - mapStartX) / width);
+		Y = (int)((KUN.y - mapStartY) / width);
+		printf("%d %d\n",X, Y);
+		/*
+		//当不是障碍物且头上是障碍
+		if(nowMap[Y][X].state != 1 && nowMap[Y + 1][X].state == 1 ){		
+			if(fmod(KUN.y - mapStartY, width) <= 1){
+				canKUNmove[0] = 0;
+				canKUNmove[1] = 1;
+			}		
+		}else{
+			canKUNmove[0] = 1;
+		}
+		//当不是障碍物且下方是障碍
+		if(nowMap[Y][X].state != 1 && nowMap[Y - 1][X].state == 1){		
+			if((width - fmod(KUN.y - mapStartY, width)) >= 18){
+				canKUNmove[1] = 0;
+				canKUNmove[0] = 1;		
+			}		
+		}else{
+			canKUNmove[1] = 1;
+		}
+		//当不是障碍物且右方是障碍
+		if(nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
+			if((width - fmod(KUN.x - mapStartX, width)) >= 14){
+				canKUNmove[3] = 0;
+				canKUNmove[2] = 1;		
+			}		
+		}else{
+			canKUNmove[3] = 1;
+		}
+		//当不是障碍物且左方是障碍
+		if(nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
+			if(fmod(KUN.x - mapStartX, width) <= 14){
+				canKUNmove[2] = 0;
+				canKUNmove[3] = 1;
+			}		
+		}else{
+			canKUNmove[2] = 1;
+		}*/
+	}
+}
 
 /*****************
 刷新显示函数，依赖全局变量
@@ -466,15 +525,17 @@ void display()
 	if(MenuList2State[3]) menu2fun4();
 	
 	//画坤
-    if(canKUNdisplay) DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
+    if(canKUNdisplay){
+		DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
+	} 
 
 	//字
-	/*MovePen(300, 540);
+	MovePen(300, 540);
 	SetPenColor("Black");
 	SetPenSize(1);
 	DrawLine(1000,0);
 	MovePen(960, 100);
-	DrawLine(0,900);*/
+	DrawLine(0,900);
 	return;
 }
 
@@ -486,6 +547,9 @@ void menu1fun1()
 {
 	canKUNdisplay = 1;
 	canMapdisplay = 1;
+	//更改坤的初始位置
+	KUN.x = mapStartX + startX * width - width/2;
+	KUN.y = mapStartY + startY * width - width/2 + 5;
 	MenuList1State[0] = 0;  //只执行一次
 }
 
