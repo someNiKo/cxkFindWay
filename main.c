@@ -99,7 +99,7 @@ static bool fps_flag = 1;  //坤动画重播标志
 static bool isCtrl = 0;  //ctrl键是否被按下
 static bool canKUNdisplay = 1;  //drawKUN函数是否可以被调用
 static bool canMapdisplay = 0;  //地图可以显示吗
-static bool canKUNmove[4] = {1, 1, 1, 1};  //坤可以动吗？
+static bool canKUNmove[4] = {1, 1, 1, 1};  //坤可以动吗？(0上1下2左3右)
 
 //来自draw.c:
 
@@ -157,7 +157,7 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-	InitConsole();
+	//InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -166,7 +166,7 @@ void Main()
 	for(int i = 0; i < 20; i++){
 		for(int j = 0; j < 30; j++){
 			if(i % 2 == 0) nowMap[i][j].state = 0;
-			else nowMap[i][j].state = 1;
+			else if(j%3 == 0) nowMap[i][j].state = 1;
 			nowMap[i][j].y = i + 1;
 			nowMap[i][j].x = j + 1;
 			lastMap[i][j].state = 0;
@@ -449,47 +449,87 @@ void TimerEventProcess(int timerID)
 void KUNmoveJUDGE(){
 	if(canMapdisplay){
 		//坐标变换
-		int X, Y;
-		X = (int)((KUN.x - mapStartX) / width);
-		Y = (int)((KUN.y - mapStartY) / width);
-		printf("%d %d\n",X, Y);
-		/*
+		int X = 0, Y = 0;
+		//printf("%d %d %.1lf %.1lf %.1lf %.1lf\n",X,Y,KUN.x,KUN.y,mapStartX,mapStartY);
+		if(KUN.x - mapStartX > 0){
+			X = (int)((KUN.x - mapStartX) / width);
+		}else{
+			X = -1;
+		}
+		if(KUN.y - mapStartY > 0){
+			Y = (int)((KUN.y - mapStartY - 15) / width);
+		}else{
+			Y = -1;
+		}		
+		//printf("%d %d %.1lf %.1lf %.1lf %.1lf\n",X,Y,KUN.x,KUN.y,mapStartX,mapStartY);
+		//即将出界判断
+		bool corrected = 1;
+		//左方出界
+		if(X < 0){
+			canKUNmove[2] = 0;
+			canKUNmove[3] = 1;
+			corrected = 0;
+		}
+		//右方出界
+		if(X > nowMapx - 1){
+			canKUNmove[3] = 0;
+			canKUNmove[2] = 1;
+			corrected = 0;
+		}
+		//下方出界
+		if(KUN.y - mapStartY < 20){
+			canKUNmove[1] = 0;
+			canKUNmove[0] = 1;
+			corrected = 0;
+		}
+		//上方出界
+		if(Y > nowMapy - 1){
+			canKUNmove[0] = 0;
+			canKUNmove[1] = 1;
+			corrected = 0;
+		}
+
+	if(corrected){
 		//当不是障碍物且头上是障碍
-		if(nowMap[Y][X].state != 1 && nowMap[Y + 1][X].state == 1 ){		
-			if(fmod(KUN.y - mapStartY, width) <= 1){
+		if(Y + 1 <= nowMapy - 1 && nowMap[Y][X].state != 1 && nowMap[Y + 1][X].state == 1 ){		
+			if((width - fmod(KUN.y - mapStartY, width)) <= 14){
 				canKUNmove[0] = 0;
 				canKUNmove[1] = 1;
+				corrected = 0;
 			}		
-		}else{
-			canKUNmove[0] = 1;
 		}
 		//当不是障碍物且下方是障碍
-		if(nowMap[Y][X].state != 1 && nowMap[Y - 1][X].state == 1){		
-			if((width - fmod(KUN.y - mapStartY, width)) >= 18){
+		if(Y - 1 >= 0 && nowMap[Y][X].state != 1 && nowMap[Y - 1][X].state == 1){		
+			if(fmod(KUN.y - mapStartY, width) <= 40){
 				canKUNmove[1] = 0;
-				canKUNmove[0] = 1;		
+				canKUNmove[0] = 1;
+				corrected = 0;		
 			}		
-		}else{
-			canKUNmove[1] = 1;
 		}
 		//当不是障碍物且右方是障碍
-		if(nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
-			if((width - fmod(KUN.x - mapStartX, width)) >= 14){
+		if(X + 1 <= nowMapx - 1 && nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
+			if((width - fmod(KUN.x - mapStartX, width)) <= 14){
 				canKUNmove[3] = 0;
-				canKUNmove[2] = 1;		
+				canKUNmove[2] = 1;
+				corrected = 0;		
 			}		
-		}else{
-			canKUNmove[3] = 1;
 		}
 		//当不是障碍物且左方是障碍
-		if(nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
+		if(X - 1 >= 0 && nowMap[Y][X].state != 1 && nowMap[Y][X - 1].state == 1){		
 			if(fmod(KUN.x - mapStartX, width) <= 14){
 				canKUNmove[2] = 0;
 				canKUNmove[3] = 1;
+				corrected = 0;
 			}		
-		}else{
+		}																
+	}
+		//恢复
+		if(corrected){
+			canKUNmove[0] = 1;
+			canKUNmove[1] = 1;
 			canKUNmove[2] = 1;
-		}*/
+			canKUNmove[3] = 1;
+		}		
 	}
 }
 
@@ -529,14 +569,14 @@ void display()
 		DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 	} 
 
-	//字
-	MovePen(300, 540);
+	//辅助线
+	/*MovePen(300, 540);
 	SetPenColor("Black");
 	SetPenSize(1);
 	DrawLine(1000,0);
 	MovePen(960, 100);
-	DrawLine(0,900);
-	return;
+	DrawLine(0,900);*?
+	return;*/
 }
 
 
@@ -611,6 +651,8 @@ void menu2fun1()
 	if(isFinish){
 		canKUNdisplay = 1;
 		MenuList2State[0] = 0;
+		if(nowMapx > 30 || nowMapx < 10) nowMapx = 10;
+		if(nowMapy > 30 || nowMapy < 10) nowMapy = 10;
 		isFinish = 0;
 	}
 }

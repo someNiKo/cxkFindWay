@@ -42,8 +42,8 @@ bool MenuList3State = 0;  //第三个菜单列表选项
 bool isFlash = 1;
 bool isFlashing[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-double mapStartX, mapStartY;  //地图绘制开始的坐标
-double width;  //地图一个箱子宽度
+double mapStartX = 1, mapStartY = 1;  //地图绘制开始的坐标
+double width = 100;  //地图一个箱子宽度                  //这是我遇到过最离谱的BUG
 
 //来自于main.c:
 extern char mapx[10];
