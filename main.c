@@ -501,12 +501,13 @@ void KUNmoveJUDGE(){
 		}
 		//当不是障碍物且下方是障碍
 		if(Y - 1 >= 0 && nowMap[Y][X].state != 1 && nowMap[Y - 1][X].state == 1){		
-			if(fmod(KUN.y - mapStartY, width) <= 40){
+			if(fmod(KUN.y - mapStartY - 15, width) <= 25){
 				canKUNmove[1] = 0;
 				canKUNmove[0] = 1;
 				corrected = 0;		
 			}		
 		}
+		printf("%d %lf (%d,%d)\n", canKUNmove[1],fmod(KUN.y - mapStartY, width),X+1,Y+1);
 		//当不是障碍物且右方是障碍
 		if(X + 1 <= nowMapx - 1 && nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
 			if((width - fmod(KUN.x - mapStartX, width)) <= 14){
@@ -580,7 +581,25 @@ void display()
 	return;*/
 }
 
-
+/************
+交换新老地图工具
+**************/
+void mapcopy(bool flag)
+{
+	if(flag){  //老->现在
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 30; j++){
+				nowMap[i][j] = lastMap[i][j];
+			}
+		}
+	}else{  //现在->老
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 30; j++){
+				lastMap[i][j] = nowMap[i][j];
+			}
+		}			
+	}
+}
 /*****************
 菜单列表一：1-新的开始
 *****************/
@@ -717,7 +736,7 @@ void menu2fun2()
 	}
 
 
-	if(MenuList2State[2]) isFinish = 1;
+	if(MenuList2State[2] || MenuList2State[3] || MenuList2State[0]) isFinish = 1;
 
 	if(isFinish){
 		MenuList2State[1] = 0;
@@ -731,6 +750,7 @@ void menu2fun2()
 void menu2fun3()
 {
 	canMapdisplay = 0;
+	mapcopy(0);
 	MenuList2State[2] = 0;
 }
 
@@ -739,7 +759,9 @@ void menu2fun3()
 *****************/
 void menu2fun4()
 {
-	
+	canMapdisplay = 1;
+	mapcopy(1);
+	MenuList2State[3] = 0;
 }
 
 /*****************

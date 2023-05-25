@@ -1,10 +1,10 @@
 GCC     = gcc
 CFLAGS  = -g -Wall -Wshadow $(INCS)
-OBJ     = lib/exceptio.o lib/genlib.o lib/graphics.o lib/linkedlist.o lib/random.o lib/simpio.o lib/strlib.o lib/main.o lib/imgui.o\
+OBJ     = lib/exceptio.o lib/genlib.o lib/graphics.o lib/linkedlist.o lib/random.o lib/simpio.o lib/strlib.o lib/main.o\
  lib/draw.o lib/find.o
-COBJ    = lib\exceptio.o lib\genlib.o lib\graphics.o lib\linkedlist.o lib\random.o lib\simpio.o lib\strlib.o lib\main.o lib\imgui.o\
+COBJ    = lib\exceptio.o lib\genlib.o lib\graphics.o lib\linkedlist.o lib\random.o lib\simpio.o lib\strlib.o lib\main.o\
  lib\draw.o lib\find.o
-LINKOBJ = lib/exceptio.o lib/genlib.o lib/graphics.o lib/linkedlist.o lib/random.o lib/simpio.o lib/strlib.o lib/main.o lib/imgui.o\
+LINKOBJ = lib/exceptio.o lib/genlib.o lib/graphics.o lib/linkedlist.o lib/random.o lib/simpio.o lib/strlib.o lib/main.o\
  lib/draw.o lib/find.o
 LIBS    = -L"G:/mingw64/lib" -L"G:/mingw64/x86_64-w64-mingw32/lib" -L"G:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0" -static-libgcc -mwindows
 INCS    = -I"G:/mingw64/include" -I"G:/mingw64/x86_64-w64-mingw32/include" -I"G:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include" \
@@ -43,9 +43,6 @@ lib/simpio.o: lib/simpio.c
 
 lib/strlib.o: lib/strlib.c
 	$(GCC) -c lib/strlib.c -o lib/strlib.o $(CFLAGS)
-
-lib/imgui.o: lib/imgui.c
-	$(GCC) -c lib/imgui.c -o lib/imgui.o $(CFLAGS)
 
 lib/draw.o: draw.c
 	$(GCC) -c -fopenmp draw.c -o lib/draw.o $(CFLAGS) -L"G:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0"
