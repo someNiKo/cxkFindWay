@@ -33,6 +33,7 @@ void DrawStage(void);
 void DrawMenu();
 void DrawBox();
 int DrawMenu2fun1();
+int DrawMenu2fun2();
 
 
 

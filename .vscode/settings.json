@@ -29,6 +29,7 @@
         "istream": "c",
         "ostream": "c",
         "time.h": "c",
-        "omp.h": "c"
+        "omp.h": "c",
+        "limits": "c"
     }
 }

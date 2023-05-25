@@ -1259,11 +1259,6 @@ void DrawStage(void)
 	return;
 }
 
-
-
-
-
-
 /*****************
 画菜单函数
 ******************/
@@ -1378,7 +1373,7 @@ void DrawMenu()
 		}	
 	}
 
-	//绘制第二个列表菜单——“工具”
+	//绘制第三个列表菜单——“帮助”
 	if(isInMenu(0, 680, 150) == 0){
 		DrawOneMenu(0, 680, 150, "MLPink", "帮助", "White");
 	}else{
@@ -1665,6 +1660,9 @@ bool isInBox(double x, double y, double Width)
 	else return 0;
 }
 
+/***************
+绘制 创建地图 界面
+*****************/
 int DrawMenu2fun1()
 {
 	if(DrawOneButton(500, 70, 200, 40, 20, "MDPink", "MLPink", "确定", "White", 0, 0) == 0){
@@ -1728,4 +1726,140 @@ int DrawMenu2fun1()
 		break;
 	}
 	return 5;
+}
+
+/***************
+绘制编辑一个提示语
+*****************/
+void DrawOneTips(double x, double y, double high, char *color, char *text, char *color2, bool ischoose)
+{
+	//画方块
+	StartFilledRegion(1);	
+	SetPenSize(1);
+	SetPenColor(color);
+	MovePen(x, y);
+	DrawLine(30, -30);
+	DrawLine(0, -1 * high);
+	DrawLine(-30, 30);
+	DrawLine(0, high);	
+	EndFilledRegion();
+
+	//画边框
+	//非选中情况
+	if(!ischoose){
+		SetPenSize(3);
+		SetPenColor("MCyan");
+		MovePen(x, y);
+		DrawLine(30, -30);
+		DrawLine(0, -1 * high);
+		DrawLine(-30, 30);
+		DrawLine(0, high);
+	}else{
+		SetPenSize(3);
+		SetPenColor("Purple");
+		MovePen(x, y);
+		DrawLine(30, -30);
+		DrawLine(0, -1 * high);
+		DrawLine(-30, 30);
+		DrawLine(0, high);
+	}
+
+	//写文字
+	int n = strlen(text) / 2;  //获取字符串长度
+	char s[3] = {'\0', '\0', '\0'};
+	char *p = text;
+	SetPenColor(color2);
+	SetPointSize(20);
+	SetFont("千图小兔体");
+	for(int i = 1; i <= n; i++){
+		s[0] = p[2 * (i - 1)];
+		s[1] = p[2 * (i - 1) + 1];
+		MovePen(x + 15 - TextCW / 2, y - high / 2 + n / 2 * TextCW - i * TextCW - 15);
+		DrawTextString(s);
+	}		
+}
+
+/***************
+绘制 编辑地图 界面
+*****************/
+int DrawMenu2fun2()
+{
+	static bool isEditing[4] = {0, 0, 0, 0};
+	int X = 0, Y = 0;
+	//得到起始坐标
+	if(nowMapx % 2 == 0){
+		mapStartX = 960 - (nowMapx / 2) * width;
+	}else{
+		mapStartX = 960 - (nowMapx / 2) * width - width / 2;
+	}
+	if(nowMapy % 2 == 0){
+		mapStartY = 540 - (nowMapy / 2) * width;
+	}else{
+		mapStartY = 540 - (nowMapy / 2) * width - width / 2;
+	}	
+	//坐标变换
+	X = (int)((Mx - mapStartX) / width);
+	Y = (int)((My - mapStartY) / width);
+	bool flag = 0;  //鼠标是否在地图内
+	if(X >= 0 && X <= nowMapx - 1 && Y >= 0 && Y <= nowMapy) flag = 1;
+	//更改编辑状态
+	if((isInMenu(0, 400, 70) && isMClick) || (flag && isEditing[0])){
+		isEditing[0] = 1;
+		isEditing[1] = 0;
+		isEditing[2] = 0;
+		isEditing[3] = 0;
+	}else if((isInMenu(0, 330, 70) && isMClick) || (flag && isEditing[1])){
+		isEditing[0] = 0;
+		isEditing[1] = 1;
+		isEditing[2] = 0;
+		isEditing[3] = 0;		
+	}else if((isInMenu(0, 260, 70) && isMClick) || (flag && isEditing[2])){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 1;
+		isEditing[3] = 0;		
+	}else if((isInMenu(0, 190, 70) && isMClick) || (flag && isEditing[3])){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 0;
+		isEditing[3] = 1;		
+	}else if(isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 0;
+		isEditing[3] = 0;			
+	}
+			
+	//画提示方块
+	if(isInMenu(0, 400, 70) == 0){
+		DrawOneTips(0, 400, 70, "MGray1", "空白", "Black", isEditing[0]);
+	}else{
+		DrawOneTips(0, 400, 70, "MGray2", "空白", "Black", isEditing[0]);
+	}
+	if(isInMenu(0, 330, 70) == 0){
+		DrawOneTips(0, 330, 70, "MGreen2", "障碍", "White", isEditing[1]);
+	}else{
+		DrawOneTips(0, 330, 70, "MGreen1", "障碍", "White", isEditing[1]);
+	}	
+	if(isInMenu(0, 260, 70) == 0){
+		DrawOneTips(0, 260, 70, "MYellow2", "起点", "Black", isEditing[2]);
+	}else{
+		DrawOneTips(0, 260, 70, "MYellow1", "起点", "Black", isEditing[2]);
+	}
+	if(isInMenu(0, 190, 70) == 0){
+		DrawOneTips(0, 190, 70, "MRed2", "终点", "Black", isEditing[3]);
+	}else{
+		DrawOneTips(0, 190, 70, "MRed1", "终点", "Black", isEditing[3]);
+	}
+	if(isEditing[0]){
+		return 1;  //空白
+	}else if(isEditing[1]){
+		return 2;  //障碍
+	}else if(isEditing[2]){
+		return 3;  //起点
+	}else if(isEditing[3]){
+		return 4;  //终点
+	}else{
+		return 0;
+	}
 }

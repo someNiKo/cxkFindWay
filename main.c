@@ -175,8 +175,11 @@ void Main()
 		}
 	}
 	nowMap[0][0].state = 2;
+	nowMap[3][3].state = 3;
 	startX = 1;
-	startY = 1; 
+	startY = 1;
+	endX = 4;
+	endY = 4; 
 
 	registerKeyboardEvent(KeyboardEventProcess);
 	registerCharEvent(CharEventProcess);
@@ -450,7 +453,6 @@ void KUNmoveJUDGE(){
 	if(canMapdisplay){
 		//坐标变换
 		int X = 0, Y = 0;
-		//printf("%d %d %.1lf %.1lf %.1lf %.1lf\n",X,Y,KUN.x,KUN.y,mapStartX,mapStartY);
 		if(KUN.x - mapStartX > 0){
 			X = (int)((KUN.x - mapStartX) / width);
 		}else{
@@ -461,7 +463,6 @@ void KUNmoveJUDGE(){
 		}else{
 			Y = -1;
 		}		
-		//printf("%d %d %.1lf %.1lf %.1lf %.1lf\n",X,Y,KUN.x,KUN.y,mapStartX,mapStartY);
 		//即将出界判断
 		bool corrected = 1;
 		//左方出界
@@ -657,6 +658,7 @@ void menu2fun1()
 	}
 }
 
+
 /*****************
 菜单列表二：2-编辑地图
 *****************/
@@ -664,7 +666,63 @@ void menu2fun2()
 {
 	canMapdisplay = 1;
 	canKUNdisplay = 1;
-	MenuList2State[1] = 0;
+	static bool isFinish = 0;
+	int X = 0, Y = 0;
+	//得到起始坐标
+	if(nowMapx % 2 == 0){
+		mapStartX = 960 - (nowMapx / 2) * width;
+	}else{
+		mapStartX = 960 - (nowMapx / 2) * width - width / 2;
+	}
+	if(nowMapy % 2 == 0){
+		mapStartY = 540 - (nowMapy / 2) * width;
+	}else{
+		mapStartY = 540 - (nowMapy / 2) * width - width / 2;
+	}	
+	//坐标变换
+	X = (int)((Mx - mapStartX) / width);
+	Y = (int)((My - mapStartY) / width);
+	int data = DrawMenu2fun2();
+	if(X >= 0 && X <= nowMapx - 1 && Y >= 0 && Y <= nowMapy){
+		switch (data)
+		{
+		case 0:
+			/* code */
+			break;
+		case 1:
+			if(isMClick) nowMap[Y][X].state = 0;  //修改格子为空白
+			break;
+		case 2:
+			if(isMClick) nowMap[Y][X].state = 1;  //修改格子为障碍
+			break;
+		case 3:
+			if(isMClick){
+				nowMap[startY - 1][startX - 1].state = 0;  //起点改为空白
+				nowMap[Y][X].state = 2;  //修改格子为起点
+				startX = X + 1;  //刷新起点
+				startY = Y + 1;
+			} 
+			break;
+		case 4:
+			if(isMClick){
+				nowMap[endY - 1][endX - 1].state = 0;  //终点改为空白
+				nowMap[Y][X].state = 3;  //修改格子为终点
+				endX = X + 1;  //刷新终点
+				endY = Y + 1;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+
+	if(MenuList2State[2]) isFinish = 1;
+
+	if(isFinish){
+		MenuList2State[1] = 0;
+		isFinish = 0;
+	}
 }
 
 /*****************
@@ -672,7 +730,8 @@ void menu2fun2()
 *****************/
 void menu2fun3()
 {
-	
+	canMapdisplay = 0;
+	MenuList2State[2] = 0;
 }
 
 /*****************
