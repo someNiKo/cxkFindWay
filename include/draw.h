@@ -34,7 +34,7 @@ void DrawMenu();
 void DrawBox();
 int DrawMenu2fun1();
 int DrawMenu2fun2();
-
+bool isInMenu(double x, double y, double high);
 
 
 

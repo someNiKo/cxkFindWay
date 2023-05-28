@@ -84,6 +84,14 @@ static struct kun{
 	bool direction;
 }KUN = {0, 0, 1, 0, 0};
 
+typedef struct map{
+	struct map *prev;  //上一个节点的地址
+	BOX listMap[20][30];  //该节点的地图
+	struct map *next;  //下一个节点的地址
+} Map;  //存贮历史地图数据的双向链表
+
+Map *head = NULL, *end = NULL;
+
 BOX nowMap[20][30];  //当前地图
 BOX lastMap[20][30];  //上一个地图（用作撤销）
 
@@ -507,7 +515,6 @@ void KUNmoveJUDGE(){
 				corrected = 0;		
 			}		
 		}
-		printf("%d %lf (%d,%d)\n", canKUNmove[1],fmod(KUN.y - mapStartY, width),X+1,Y+1);
 		//当不是障碍物且右方是障碍
 		if(X + 1 <= nowMapx - 1 && nowMap[Y][X].state != 1 && nowMap[Y][X + 1].state == 1){		
 			if((width - fmod(KUN.x - mapStartX, width)) <= 14){
@@ -581,6 +588,113 @@ void display()
 	return;*/
 }
 
+/*********************工具********************/
+
+/********************
+将地图编码并保存
+成功 return 1
+失败 return 0
+......
+*********************/
+bool encode()
+{
+	FILE *p;
+	if((p = fopen("GameMap.txt", "a")) == NULL){
+		p = fopen("GameMap.txt", "w");
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 30; j++){
+				fprintf(p, "%d ", nowMap[i][j].state);
+			}
+			fprintf(p, "\n");
+		}
+		fclose(p);
+		return 1;  //没找到文件就新建一个
+	}else{
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 30; j++){
+				fprintf(p, "%d ", nowMap[i][j].state);
+			}
+			fprintf(p, "\n");
+		}
+	}
+	if(fclose(p) == -1){
+		return 0;
+	}else{
+		return 1;
+	}
+}
+
+/**********************
+解码地图文件
+成功 return *HEAD
+失败 return NULL
+***********************/
+bool decode()
+{
+	FILE *fp;
+	if((fp = fopen("GameMap.txt", "r")) == NULL){
+		return 0;
+	}
+	
+	Map *mp = (Map *)malloc(sizeof(Map));
+	if(head == NULL){  //第一次建立链表
+		mp->prev = NULL;  //当前节点之前为空
+		mp->next = NULL;  //当前之后节点为空
+		end = mp;         //尾节点为当前节点
+		head = mp;		  //头节点为当前节点
+	}else{             //不是第一次建立链表
+		mp->prev = end;   //当前节点之前为尾节点 
+		mp->next = NULL;  //当前节点之后为空
+		end->next = mp;   //尾节点下一个为当前节点
+		end = mp;         //尾节点为当前节点
+	}
+	
+	for(int i = 0; i < 20; i++){
+		char str[62];
+		char *pstr = str;
+		fgets(str, 62, fp);
+		for(int j = 0; j < 30; j++){
+			//处理地图数据
+			mp->listMap[i][j].state = *pstr - '0';
+			mp->listMap[i][j].x = j + 1;
+			mp->listMap[i][j].y = i + 1;
+			//移动字符串指针 pstr
+			pstr += 2;
+		}
+	}
+	fclose(fp);
+	return 1;
+}
+
+/*******************
+文件偏移量指向某行的工具
+*********************/
+void setOffsetToLineStart(FILE* file, int line, int lineLength)
+{
+    long offset = (line - 1) * lineLength;
+    fseek(file, offset, SEEK_SET);
+}
+
+/*********************
+获取文件有效行数的工具
+**********************/
+int countValidLines(FILE* file) {
+    int count = 0;
+    char buffer[100]; // 适当选择缓冲区大小
+
+    // 逐行读取文件内容
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        // 检查行是否有效
+        // 这里可以根据实际需要添加更多的条件来判断行的有效性
+        if (buffer[0] != '\n' && buffer[0] != '\0') {
+            count++;
+        }
+    }
+
+    // 返回有效行数
+    return count;
+}
+
 /************
 交换新老地图工具
 **************/
@@ -600,6 +714,7 @@ void mapcopy(bool flag)
 		}			
 	}
 }
+
 /*****************
 菜单列表一：1-新的开始
 *****************/
@@ -636,7 +751,7 @@ void menu1fun3()
 *****************/
 void menu1fun4()
 {
-	
+	//记得读取文件有效行数
 }
 
 /*****************
@@ -702,7 +817,9 @@ void menu2fun2()
 	X = (int)((Mx - mapStartX) / width);
 	Y = (int)((My - mapStartY) / width);
 	int data = DrawMenu2fun2();
-	if(X >= 0 && X <= nowMapx - 1 && Y >= 0 && Y <= nowMapy){
+	
+	
+	if(Mx >= mapStartX && X <= nowMapx - 1 && Y >= 0 && Y <= nowMapy){
 		switch (data)
 		{
 		case 0:
@@ -733,6 +850,24 @@ void menu2fun2()
 		default:
 			break;
 		}
+
+	}
+
+	if(data == 5){
+		if(isInMenu(0, 140, 70) && isMClick){
+			int **reMaze = (int**)malloc((nowMapy) * sizeof(int *));
+			for (int i = 0; i < nowMapy; i++) {
+				reMaze[i] = (int*)calloc(nowMapx, sizeof(int));
+			}
+			randommap(reMaze, nowMapx, nowMapy);			
+			for(int i = 0; i < nowMapy; i++){
+				for(int j = 0; j < nowMapx; j++){
+					nowMap[i][j].state = reMaze[i][j];
+				}
+			}
+			for (int i = 0; i < nowMapy; i++) free(reMaze[i]);
+			free(reMaze);
+		}		
 	}
 
 
@@ -751,6 +886,7 @@ void menu2fun3()
 {
 	canMapdisplay = 0;
 	mapcopy(0);
+	encode();
 	MenuList2State[2] = 0;
 }
 

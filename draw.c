@@ -1784,7 +1784,7 @@ void DrawOneTips(double x, double y, double high, char *color, char *text, char 
 *****************/
 int DrawMenu2fun2()
 {
-	static bool isEditing[4] = {0, 0, 0, 0};
+	static bool isEditing[5] = {0, 0, 0, 0, 0};
 	int X = 0, Y = 0;
 	//得到起始坐标
 	if(nowMapx % 2 == 0){
@@ -1801,55 +1801,71 @@ int DrawMenu2fun2()
 	X = (int)((Mx - mapStartX) / width);
 	Y = (int)((My - mapStartY) / width);
 	bool flag = 0;  //鼠标是否在地图内
-	if(X >= 0 && X <= nowMapx - 1 && Y >= 0 && Y <= nowMapy) flag = 1;
+	if(Mx >= mapStartX && X <= nowMapx - 1 && Y >= 0 && Y <= nowMapy) flag = 1;
 	//更改编辑状态
-	if((isInMenu(0, 400, 70) && isMClick) || (flag && isEditing[0])){
+	if((isInMenu(0, 420, 70) && isMClick) || (flag && isEditing[0])){
 		isEditing[0] = 1;
 		isEditing[1] = 0;
 		isEditing[2] = 0;
 		isEditing[3] = 0;
-	}else if((isInMenu(0, 330, 70) && isMClick) || (flag && isEditing[1])){
+		isEditing[4] = 0;
+	}else if((isInMenu(0, 350, 70) && isMClick) || (flag && isEditing[1])){
 		isEditing[0] = 0;
 		isEditing[1] = 1;
 		isEditing[2] = 0;
-		isEditing[3] = 0;		
-	}else if((isInMenu(0, 260, 70) && isMClick) || (flag && isEditing[2])){
+		isEditing[3] = 0;
+		isEditing[4] = 0;		
+	}else if((isInMenu(0, 280, 70) && isMClick) || (flag && isEditing[2])){
 		isEditing[0] = 0;
 		isEditing[1] = 0;
 		isEditing[2] = 1;
-		isEditing[3] = 0;		
-	}else if((isInMenu(0, 190, 70) && isMClick) || (flag && isEditing[3])){
+		isEditing[3] = 0;
+		isEditing[4] = 0;		
+	}else if((isInMenu(0, 210, 70) && isMClick) || (flag && isEditing[3])){
 		isEditing[0] = 0;
 		isEditing[1] = 0;
 		isEditing[2] = 0;
-		isEditing[3] = 1;		
+		isEditing[3] = 1;
+		isEditing[4] = 0;		
+	}else if((isInMenu(0, 140, 70) && isMClick) || (flag && isEditing[4])){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 0;
+		isEditing[3] = 0;
+		isEditing[4] = 1;			
 	}else if(isMClick){
 		isEditing[0] = 0;
 		isEditing[1] = 0;
 		isEditing[2] = 0;
-		isEditing[3] = 0;			
+		isEditing[3] = 0;
+		isEditing[4] = 0;		
 	}
 			
 	//画提示方块
-	if(isInMenu(0, 400, 70) == 0){
-		DrawOneTips(0, 400, 70, "MGray1", "空白", "Black", isEditing[0]);
+	if(isInMenu(0, 420, 70) == 0){
+		DrawOneTips(0, 420, 70, "MGray1", "空白", "Black", isEditing[0]);
 	}else{
-		DrawOneTips(0, 400, 70, "MGray2", "空白", "Black", isEditing[0]);
+		DrawOneTips(0, 420, 70, "MGray2", "空白", "Black", isEditing[0]);
 	}
-	if(isInMenu(0, 330, 70) == 0){
-		DrawOneTips(0, 330, 70, "MGreen2", "障碍", "White", isEditing[1]);
+	if(isInMenu(0, 350, 70) == 0){
+		DrawOneTips(0, 350, 70, "MGreen2", "障碍", "White", isEditing[1]);
 	}else{
-		DrawOneTips(0, 330, 70, "MGreen1", "障碍", "White", isEditing[1]);
+		DrawOneTips(0, 350, 70, "MGreen1", "障碍", "White", isEditing[1]);
 	}	
-	if(isInMenu(0, 260, 70) == 0){
-		DrawOneTips(0, 260, 70, "MYellow2", "起点", "Black", isEditing[2]);
+	if(isInMenu(0, 280, 70) == 0){
+		DrawOneTips(0, 280, 70, "MYellow2", "起点", "Black", isEditing[2]);
 	}else{
-		DrawOneTips(0, 260, 70, "MYellow1", "起点", "Black", isEditing[2]);
+		DrawOneTips(0, 280, 70, "MYellow1", "起点", "Black", isEditing[2]);
 	}
-	if(isInMenu(0, 190, 70) == 0){
-		DrawOneTips(0, 190, 70, "MRed2", "终点", "Black", isEditing[3]);
+	if(isInMenu(0, 210, 70) == 0){
+		DrawOneTips(0, 210, 70, "MRed2", "终点", "Black", isEditing[3]);
 	}else{
-		DrawOneTips(0, 190, 70, "MRed1", "终点", "Black", isEditing[3]);
+		DrawOneTips(0, 210, 70, "MRed1", "终点", "Black", isEditing[3]);
+	}
+	if(isInMenu(0, 140, 70) == 0){
+		DrawOneTips(0, 140, 70, "Black", "随机", "White", isEditing[4]);
+	}else{
+		DrawOneTips(0, 140, 70, "White", "随机", "Black", isEditing[4]);
 	}
 	if(isEditing[0]){
 		return 1;  //空白
@@ -1859,6 +1875,8 @@ int DrawMenu2fun2()
 		return 3;  //起点
 	}else if(isEditing[3]){
 		return 4;  //终点
+	}else if(isEditing[4]){
+		return 5;  //随机
 	}else{
 		return 0;
 	}
