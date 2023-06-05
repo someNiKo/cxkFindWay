@@ -1,18 +1,29 @@
 #include "include/find.h"
  
-//墙和路径的标识
 #define WALL  1
 #define ROUTE 0
- 
-//控制迷宫的复杂度，数值越大复杂度越低，最小值为0
-static int Rank = 0;
- 
-void CreateMaze(int **maze, int x, int y);
 
+	//每个点的上下左右四个方向扩展
+static int Rank = 0;  //控制迷宫的复杂度，数值越大复杂度越低，最小值为0
+
+//来源于main.c
+
+extern int nowMapx, nowMapy, startX, startY, endX, endY;
+
+int Count = 0;	//统计走法种数
+Way *Head = NULL, *End = NULL;
+
+int Check(int i, int j, int k, int **maze);
+void Path_Search(int i, int j, int dep, int endx, int endy, int **maze); 
+void CreateMaze(int **maze, int x, int y);
+void Output(int **maze, int count, int dep);
+
+/************************生成地图**************************/
 /************
+传入地图长宽
 传回生成好的地图
 *************/ 
-void randommap(int **reMaze, int x, int y)  //传入地图长宽
+void randommap(int **reMaze, int x, int y)
 {
     srand((unsigned)time(NULL));
  
@@ -84,7 +95,8 @@ void randommap(int **reMaze, int x, int y)  //传入地图长宽
 /*************
 生成迷宫
 *************/
-void CreateMaze(int **maze, int x, int y) {
+void CreateMaze(int **maze, int x, int y) 
+{
 	maze[x][y] = ROUTE;
  
 	//确保四个方向随机
@@ -140,5 +152,179 @@ void CreateMaze(int **maze, int x, int y) {
 		if (range <= 0) {
 			CreateMaze(maze, dx, dy);
 		}
+	}
+}
+
+
+/************************寻找路线**************************/
+
+/****************
+返回一个随机数
+*****************/
+int Random(int n)
+{
+	srand(time(NULL));
+	int random_number = rand() % (n + 1);
+	return random_number;
+}
+
+/****************
+递归寻路函数
+maze[0][?]以及maze[?][0]需要是1
+*****************/
+void Path_Search(int i, int j, int dep, int endx, int endy, int **maze)
+{
+	int k, newi, newj;
+	int fx[4] = { -1,1,0,0 }, fy[4] = { 0,0,-1,1 };
+	for (k = 0; k <= 3; k++) {				//搜索当前坐标的四个扩展方向
+		if (Check(i, j, k, maze) == 1){
+			newi = i + fy[k];
+			newj = j + fx[k];
+			maze[newi][newj] = dep;			//来到新位置后,设置当前值为搜索深度
+			if (newi == endy && newj == endx){	//走到(endy,endx)即出口则结束搜索，输出路径并返回
+				Count++;
+				Output(maze, Count, dep);
+			}
+			else							//否则进行下一层递归
+				Path_Search(newi, newj, dep + 1, endx, endy, maze);
+			maze[newi][newj] = 0;			//走不通，回溯
+		}
+	}
+}
+
+/******************
+检查当前坐标是否可行
+******************/
+int Check(int i, int j, int k, int **maze)
+{
+	int fx[4] = {-1, 1, 0, 0}, fy[4] = {0, 0, -1, 1};
+	int flag = 1;
+	i += fy[k];
+	j += fx[k];
+	if (i > nowMapy || i < 1 || j > nowMapx || j < 1){
+		flag = 0;
+	}	//是否在迷宫内&拒绝越界 		
+	if (maze[i][j] != 0 && maze[i][j] != 3){
+		flag = 0;
+	}					//是否可行		
+	return flag;
+}
+
+/********************
+输出寻路结果
+*********************/
+void Findfun(int **maze, int mod, int KUNX, int KUNY)
+{
+	Count = 0;
+	Head = NULL;
+	End = NULL;  //初始化
+	
+	//保护原始数据
+	int **copyMaze = (int **)malloc(sizeof(int *) * (nowMapy + 2));
+	for(int i = 0; i <= nowMapy + 1; i++){
+		copyMaze[i] = (int *)malloc(sizeof(int) * (nowMapx + 2));
+	}
+	for(int i = 0; i <= nowMapy + 1; i++){
+		for(int j = 0; j <= nowMapx + 1; j++){
+			copyMaze[i][j] = maze[i][j];
+		}
+	}	
+
+	//寻路
+	Path_Search(KUNY, KUNX, 4, endX, endY, maze);
+	
+	Way *p = Head;
+	Way m;
+	Way *min = &m;
+	min->length = 1000;  //让最小值最大
+	while(p != NULL){
+		if(p->length <= min->length){
+			min = p;
+		}
+		p = p->next;
+	}
+	p = Head;
+	switch (mod)
+	{
+	case 1:  //提示下一步
+		for(int i = 0; i <= nowMapy + 1; i++){
+			for(int j = 0; j <= nowMapx + 1; j++){
+				maze[i][j] = copyMaze[i][j];
+			}
+		}
+		if(min->map[KUNY + 1][KUNX] == 4){
+			maze[KUNY + 1][KUNX] = 4;
+		}else if(min->map[KUNY - 1][KUNX] == 4){
+			maze[KUNY - 1][KUNX] = 4;
+		}else if(min->map[KUNY][KUNX + 1] == 4){
+			maze[KUNY][KUNX + 1] = 4;
+		}else if(min->map[KUNY][KUNX - 1] == 4){
+			maze[KUNY][KUNX - 1] = 4;
+		}else{
+			maze[KUNY][KUNX] = 4;
+		}
+		break;
+	case 2:  //最短路径
+		for(int i = 0; i <= nowMapy + 1; i++){
+			for(int j = 0; j <= nowMapx + 1; j++){
+				maze[i][j] = min->map[i][j];
+			}
+		}
+		break;
+	case 3:  //随机一条路径
+		for(int i = 0; i < Random(Count); i++){
+			p = p->next;
+		}
+		for(int i = 0; i <= nowMapy + 1; i++){
+			for(int j = 0; j <= nowMapx + 1; j++){
+				maze[i][j] = p->map[i][j];
+			}
+		}
+		break;
+	default:
+		break;
+	}
+
+	//free
+	p = Head;
+	Way *q;
+	while(p != NULL){
+		q = p;
+		p = p->next;
+		free(q);
+	}
+    for (int i = 0; i <= nowMapy + 1; i++) free(copyMaze[i]);
+	free(copyMaze);	
+}
+
+/***************
+寻路成功后输出一个数组到链表
+****************/
+void Output(int **maze, int count, int dep)
+{
+	if(Head == NULL){
+		Way *p = (Way *)malloc(sizeof(Way));
+		Head = p;
+		End = p;
+		p->count = count;
+		p->next = NULL;
+		p->length = dep;
+		for(int i = 0; i <= nowMapy + 1; i++){
+			for(int j = 0; j <= nowMapx + 1; j++){
+				p->map[i][j] = maze[i][j];
+			}
+		}
+	}else{
+		Way *p = (Way *)malloc(sizeof(Way));
+		p->count = count;
+		p->next = NULL;
+		p->length = dep;
+		for(int i = 0; i <= nowMapy + 1; i++){
+			for(int j = 0; j <= nowMapx + 1; j++){
+				p->map[i][j] = maze[i][j];
+			}
+		}
+		End->next = p;
+		End = p;			
 	}
 }

@@ -1615,7 +1615,9 @@ bool DrawOneBox(double x, double y, double Width, int state, bool isChoosing)
 		if(isInBox(x, y, Width) || isChoosing) color = "MRed1";
 		else color = "MRed2";
 		break;
-	default:
+	default:  //路径
+		if(isInBox(x, y, Width) || isChoosing) color = "MOrange1";
+		else color = "MOrange2";		
 		break;
 	}
 
@@ -1867,6 +1869,7 @@ int DrawMenu2fun2()
 	}else{
 		DrawOneTips(0, 140, 70, "White", "随机", "Black", isEditing[4]);
 	}
+
 	if(isEditing[0]){
 		return 1;  //空白
 	}else if(isEditing[1]){
@@ -1877,6 +1880,71 @@ int DrawMenu2fun2()
 		return 4;  //终点
 	}else if(isEditing[4]){
 		return 5;  //随机
+	}else{
+		return 0;
+	}
+}
+
+/***************
+绘制 开始游戏 界面
+*****************/
+int DrawMenu1fun1()
+{
+	static bool isEditing[3] = {0, 0, 0};
+
+	if(isEditing[0] || isEditing[1] || isEditing[2]){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 0;
+	}
+	
+	static int flag = 1;
+	flag++;
+	if(flag == 4){
+		if((isInMenu(0, 420, 70)) && isMClick){
+			isEditing[0] = 1;
+			isEditing[1] = 0;
+			isEditing[2] = 0;
+		}else if((isInMenu(0, 350, 70)) && isMClick){
+			isEditing[0] = 0;
+			isEditing[1] = 1;
+			isEditing[2] = 0;		
+		}else if((isInMenu(0, 280, 70)) && isMClick){
+			isEditing[0] = 0;
+			isEditing[1] = 0;
+			isEditing[2] = 1;		
+		}else if(isMClick){
+			isEditing[0] = 0;
+			isEditing[1] = 0;
+			isEditing[2] = 0;		
+		}
+		flag = 1;
+	}
+
+	
+	//画提示方块
+	if(isInMenu(0, 420, 70) == 0){
+		DrawOneTips(0, 420, 70, "MOrange1", "提示", "White", isEditing[0]);
+	}else{
+		DrawOneTips(0, 420, 70, "MOrange2", "提示", "White", isEditing[0]);
+	}
+	if(isInMenu(0, 350, 70) == 0){
+		DrawOneTips(0, 350, 70, "Morange1", "最短", "White", isEditing[1]);
+	}else{
+		DrawOneTips(0, 350, 70, "MOrange2", "最短", "White", isEditing[1]);
+	}	
+	if(isInMenu(0, 280, 70) == 0){
+		DrawOneTips(0, 280, 70, "MOrange1", "其他", "White", isEditing[2]);
+	}else{
+		DrawOneTips(0, 280, 70, "MOrange2", "其他", "White", isEditing[2]);
+	}
+
+	if(isEditing[0]){
+		return 1;  //提示
+	}else if(isEditing[1]){
+		return 2;  //最短
+	}else if(isEditing[2]){
+		return 3;  //其他
 	}else{
 		return 0;
 	}

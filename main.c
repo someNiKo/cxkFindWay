@@ -214,6 +214,8 @@ void Main()
 	DefineColor("MYellow2", 1, .8, .32);
 	DefineColor("MRed1", 1, .4, .3);
 	DefineColor("MRed2", .875, .16, .16);
+	DefineColor("MOrange1", .95, .56, .22);
+	DefineColor("MOrange2", .95, .74, .36);	
 
 	//初始化坤的坐标
 	KUN.x = screen_x/2;
@@ -457,7 +459,8 @@ void TimerEventProcess(int timerID)
 /*************
 判断坤是否可移动
 **************/
-void KUNmoveJUDGE(){
+void KUNmoveJUDGE()
+{
 	if(canMapdisplay){
 		//坐标变换
 		int X = 0, Y = 0;
@@ -678,7 +681,8 @@ void setOffsetToLineStart(FILE* file, int line, int lineLength)
 /*********************
 获取文件有效行数的工具
 **********************/
-int countValidLines(FILE* file) {
+int countValidLines(FILE* file)
+{
     int count = 0;
     char buffer[100]; // 适当选择缓冲区大小
 
@@ -715,17 +719,117 @@ void mapcopy(bool flag)
 	}
 }
 
+/***********************菜单功能***********************/
 /*****************
 菜单列表一：1-新的开始
 *****************/
 void menu1fun1()  
 {
+	static bool other = 1; 
+	if(other){
+		MenuList2State[1] = 0;
+		MenuList2State[0] = 0;
+		other = 0;
+	}
+	
 	canKUNdisplay = 1;
 	canMapdisplay = 1;
-	//更改坤的初始位置
-	KUN.x = mapStartX + startX * width - width/2;
-	KUN.y = mapStartY + startY * width - width/2 + 5;
-	MenuList1State[0] = 0;  //只执行一次
+	
+	static bool flag = 1;
+	static bool isFinish = 0;
+	
+	if(flag){
+		//更改坤的初始位置  只执行一次
+		KUN.x = mapStartX + startX * width - width/2;
+		KUN.y = mapStartY + startY * width - width/2 + 15;
+		flag = 0;		
+	}	
+	
+	//坐标变换
+	int X = 0, Y = 0;  //坤的矩阵坐标
+	if(KUN.x - mapStartX > 0){
+		X = (int)((KUN.x - mapStartX) / width);
+	}else{
+		X = 0;
+	}
+	if(KUN.y - mapStartY > 0){
+		Y = (int)((KUN.y - mapStartY - 15) / width);
+	}else{
+		Y = 0;
+	}
+
+	//结束条件判断
+	static int times = 0;  //跑30次
+	if(nowMap[Y][X].state == 3 && times <= 30){
+		SetPenColor("MRed2");
+		SetPointSize(200);
+		SetFont("千图小兔体");
+		MovePen(700, 500);
+		DrawTextString("成功!");
+		times++;
+		if(times == 30) isFinish = 1;
+	}	
+
+	int data = DrawMenu1fun1();
+
+	int **Maze = (int **)malloc((nowMapy + 2) * sizeof(int *));
+	for(int i = 0; i <= nowMapy + 1; i++){
+		Maze[i] = (int *)malloc((nowMapx + 2) * sizeof(int));
+	}
+	for(int i = 0; i <= nowMapy + 1; i++){
+		Maze[i][0] = 1;
+		Maze[i][nowMapx + 1] = 1;
+	}
+	for(int j = 0; j <= nowMapx + 1; j++){
+		Maze[0][j] = 1;
+		Maze[nowMapy + 1][j] = 1;
+	}
+	for(int i = 0; i < nowMapy; i++){
+		for(int j = 0; j < nowMapx; j++){
+			Maze[i + 1][j + 1] = nowMap[i][j].state;
+		}
+	}	
+
+	static int showtimes = 0;
+	if(showtimes){
+		showtimes++;
+		if(showtimes >= 20){
+			showtimes = 0;
+			mapcopy(1);
+			canKUNdisplay = 1;
+		}
+	}
+
+	if(data && isMClick){
+		printf("%d\n",data);
+		canKUNdisplay = 0;
+		showtimes = 1;
+		Findfun(Maze, data, X + 1, Y + 1);
+		//保护数据
+		mapcopy(0);
+		for(int i = 0; i < nowMapy; i++){
+			for(int j = 0; j < nowMapx; j++){
+				nowMap[i][j].state = Maze[i + 1][j + 1]; 
+			}
+		}		
+	}
+
+	//free 
+    for (int i = 0; i <= nowMapy + 1; i++) free(Maze[i]);
+	free(Maze);	
+	
+	if(MenuList2State[2] || MenuList2State[3] || MenuList2State[0] || MenuList2State[1]) isFinish = 1;
+
+	if(isFinish){
+		flag = 1;
+		other = 1;
+		canKUNdisplay = 0;
+		canMapdisplay = 0;
+		times = 0;
+		showtimes = 0;		
+		isFinish = 0;
+		MenuList1State[0] = 0;
+	}
 }
 
 /*****************
@@ -762,6 +866,12 @@ void menu2fun1()
 	canKUNdisplay = 0;
 	canMapdisplay = 0;
 	static bool isFinish = 0;
+	static bool other = 1; 
+	if(other){
+		MenuList2State[1] = 0;
+		MenuList1State[0] = 0;
+		other = 0;
+	}	
 	switch (DrawMenu2fun1())
 	{
 	case 0:
@@ -782,12 +892,16 @@ void menu2fun1()
 	default:
 		break;
 	}
-
+	if(MenuList1State[0] || MenuList1State[2] || MenuList2State[1] || MenuList2State[2] || MenuList2State[3]){
+		isFinish = 1;
+	}
+	
 	if(isFinish){
 		canKUNdisplay = 1;
 		MenuList2State[0] = 0;
 		if(nowMapx > 30 || nowMapx < 10) nowMapx = 10;
 		if(nowMapy > 30 || nowMapy < 10) nowMapy = 10;
+		other = 1;
 		isFinish = 0;
 	}
 }
@@ -798,9 +912,17 @@ void menu2fun1()
 *****************/
 void menu2fun2()
 {
+	
 	canMapdisplay = 1;
 	canKUNdisplay = 1;
 	static bool isFinish = 0;
+	static bool other = 1; 
+	if(other){
+		MenuList2State[0] = 0;
+		MenuList1State[0] = 0;
+		other = 0;
+	}	
+	
 	int X = 0, Y = 0;
 	//得到起始坐标
 	if(nowMapx % 2 == 0){
@@ -816,6 +938,7 @@ void menu2fun2()
 	//坐标变换
 	X = (int)((Mx - mapStartX) / width);
 	Y = (int)((My - mapStartY) / width);
+	
 	int data = DrawMenu2fun2();
 	
 	
@@ -863,6 +986,13 @@ void menu2fun2()
 			for(int i = 0; i < nowMapy; i++){
 				for(int j = 0; j < nowMapx; j++){
 					nowMap[i][j].state = reMaze[i][j];
+					if(reMaze[i][j] == 2){
+						startX = j + 1;
+						startY = i + 1;
+					}else if(reMaze[i][j] == 3){
+						endX = j + 1;
+						endY = i + 1;
+					}
 				}
 			}
 			for (int i = 0; i < nowMapy; i++) free(reMaze[i]);
@@ -870,11 +1000,11 @@ void menu2fun2()
 		}		
 	}
 
-
-	if(MenuList2State[2] || MenuList2State[3] || MenuList2State[0]) isFinish = 1;
+	if(MenuList2State[2] || MenuList2State[3] || MenuList2State[0] || MenuList1State[0] || MenuList1State[1]) isFinish = 1;
 
 	if(isFinish){
 		MenuList2State[1] = 0;
+		other = 1;
 		isFinish = 0;
 	}
 }
