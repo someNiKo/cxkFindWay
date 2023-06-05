@@ -1891,34 +1891,23 @@ int DrawMenu2fun2()
 int DrawMenu1fun1()
 {
 	static bool isEditing[3] = {0, 0, 0};
-
-	if(isEditing[0] || isEditing[1] || isEditing[2]){
-		isEditing[0] = 0;
+	
+	if((isInMenu(0, 420, 70)) && isMClick){
+		isEditing[0] = 1;
 		isEditing[1] = 0;
 		isEditing[2] = 0;
-	}
-	
-	static int flag = 1;
-	flag++;
-	if(flag == 4){
-		if((isInMenu(0, 420, 70)) && isMClick){
-			isEditing[0] = 1;
-			isEditing[1] = 0;
-			isEditing[2] = 0;
-		}else if((isInMenu(0, 350, 70)) && isMClick){
-			isEditing[0] = 0;
-			isEditing[1] = 1;
-			isEditing[2] = 0;		
-		}else if((isInMenu(0, 280, 70)) && isMClick){
-			isEditing[0] = 0;
-			isEditing[1] = 0;
-			isEditing[2] = 1;		
-		}else if(isMClick){
-			isEditing[0] = 0;
-			isEditing[1] = 0;
-			isEditing[2] = 0;		
-		}
-		flag = 1;
+	}else if((isInMenu(0, 350, 70)) && isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 1;
+		isEditing[2] = 0;		
+	}else if((isInMenu(0, 280, 70)) && isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 1;		
+	}else if(isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 0;		
 	}
 
 	
@@ -1938,6 +1927,14 @@ int DrawMenu1fun1()
 	}else{
 		DrawOneTips(0, 280, 70, "MOrange2", "其他", "White", isEditing[2]);
 	}
+
+	
+	static bool iscontine = 0;
+	if(isMClick == 0) iscontine = 0;
+	if((isEditing[0] || isEditing[1] || isEditing[2]) && iscontine){
+		return 0;
+	}
+	if(isMClick) iscontine = 1;
 
 	if(isEditing[0]){
 		return 1;  //提示

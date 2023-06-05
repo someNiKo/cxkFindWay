@@ -65,7 +65,7 @@ void randommap(int **reMaze, int x, int y)
 	for (int i = 0; i < y + 2; i++) {
 		for (int j = 0; j < x + 2; j++) {
 			if(Maze[i][j] == WALL){
-				if(rand() % 6 == 0){
+				if(rand() % (min(nowMapx, nowMapy)) == 0){
 					Maze[i][j] = ROUTE;
 				}
 			}
@@ -237,6 +237,7 @@ void Findfun(int **maze, int mod, int KUNX, int KUNY)
 	Way m;
 	Way *min = &m;
 	min->length = 1000;  //让最小值最大
+	int ways = Random(Count);  //随机一条路
 	while(p != NULL){
 		if(p->length <= min->length){
 			min = p;
@@ -272,7 +273,7 @@ void Findfun(int **maze, int mod, int KUNX, int KUNY)
 		}
 		break;
 	case 3:  //随机一条路径
-		for(int i = 0; i < Random(Count); i++){
+		for(int i = 0; i < ways - 1; i++){
 			p = p->next;
 		}
 		for(int i = 0; i <= nowMapy + 1; i++){

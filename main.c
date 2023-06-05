@@ -108,6 +108,7 @@ static bool isCtrl = 0;  //ctrl键是否被按下
 static bool canKUNdisplay = 1;  //drawKUN函数是否可以被调用
 static bool canMapdisplay = 0;  //地图可以显示吗
 static bool canKUNmove[4] = {1, 1, 1, 1};  //坤可以动吗？(0上1下2左3右)
+static bool canfind = 0;  //可以机器求解吗
 
 //来自draw.c:
 
@@ -165,7 +166,7 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-	//InitConsole();
+	InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -793,15 +794,32 @@ void menu1fun1()
 	static int showtimes = 0;
 	if(showtimes){
 		showtimes++;
+		canfind = 0;
 		if(showtimes >= 20){
 			showtimes = 0;
 			mapcopy(1);
 			canKUNdisplay = 1;
+			canfind = 1;
 		}
 	}
 
-	if(data && isMClick){
-		printf("%d\n",data);
+	static bool canfind1 = 0;
+	int walls = 0;
+	for(int i = 0; i < nowMapy; i++){
+		for(int j = 0; j < nowMapx; j++){
+			if(nowMap[i][j].state == 1){
+				walls++;
+			}
+		}
+	}
+	printf("%d %d %lf\n",max(abs(X + 1 - endX), abs(Y + 1 - endY)), canfind, ((double)walls/(double)(nowMapx*nowMapy)));
+	if(max(abs(X + 1 - endX), abs(Y + 1 - endY)) <= 5 && canfind == 0 && ((double)walls/(double)(nowMapx*nowMapy) > 0.75)){
+		canfind1 = 1;
+	}else if(max(abs(X + 1 - endX), abs(Y + 1 - endY)) > 5 && canfind == 0){
+		canfind1 = 0;
+	}
+
+	if(data && isMClick && (canfind || canfind1)){
 		canKUNdisplay = 0;
 		showtimes = 1;
 		Findfun(Maze, data, X + 1, Y + 1);
@@ -949,12 +967,15 @@ void menu2fun2()
 			/* code */
 			break;
 		case 1:
+			canfind = 0;
 			if(isMClick) nowMap[Y][X].state = 0;  //修改格子为空白
 			break;
 		case 2:
+			canfind = 0;
 			if(isMClick) nowMap[Y][X].state = 1;  //修改格子为障碍
 			break;
 		case 3:
+			canfind = 0;
 			if(isMClick){
 				nowMap[startY - 1][startX - 1].state = 0;  //起点改为空白
 				nowMap[Y][X].state = 2;  //修改格子为起点
@@ -963,6 +984,7 @@ void menu2fun2()
 			} 
 			break;
 		case 4:
+			canfind = 0;
 			if(isMClick){
 				nowMap[endY - 1][endX - 1].state = 0;  //终点改为空白
 				nowMap[Y][X].state = 3;  //修改格子为终点
@@ -977,6 +999,7 @@ void menu2fun2()
 	}
 
 	if(data == 5){
+		canfind = 1;
 		if(isInMenu(0, 140, 70) && isMClick){
 			int **reMaze = (int**)malloc((nowMapy) * sizeof(int *));
 			for (int i = 0; i < nowMapy; i++) {
