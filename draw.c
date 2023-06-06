@@ -1,6 +1,4 @@
 #include "include/draw.h"
-#include <math.h>
-#include <string.h>
 
 #define PI acos(-1)
 #define kun_beidai_y 5*tan(PI/3)
@@ -1283,7 +1281,7 @@ void DrawMenu()
 	if(isInMenu(0, 980, 150) && isMClick){
 		DrawOneMenu(30, 950, 150, "MDPink", "新的开始", "Black");
 		DrawOneMenu(60, 920, 150, "MDPink", "重新开始", "Black");
-		DrawOneMenu(90, 890, 150, "MDPink", "保存游戏", "Black");
+		DrawOneMenu(90, 890, 150, "MDPink", "保存退出", "Black");
 		DrawOneMenu(120, 860, 150, "MDPink", "打开存档", "Black");						
 		isMenuList1 = 1;
 	}
@@ -1304,9 +1302,9 @@ void DrawMenu()
 		}
 
 		if(isInMenu(90, 890, 150) == 0){
-			DrawOneMenu(90, 890, 150, "MLPink", "保存游戏", "Black");
+			DrawOneMenu(90, 890, 150, "MLPink", "保存退出", "Black");
 		}else{
-			DrawOneMenu(90, 890, 150, "MDPink", "保存游戏", "Black");
+			DrawOneMenu(90, 890, 150, "MDPink", "保存退出", "Black");
 			DrawOneMenu(90, 740, 150, "MDPink", "CTRL+I", "Black");
 		}					
 	
@@ -1945,4 +1943,66 @@ int DrawMenu1fun1()
 	}else{
 		return 0;
 	}
+}
+
+/********************
+绘制 打开存档 界面
+*******************/
+int DrawMenu1fun4()
+{
+	static bool isEditing[3] = {0, 0, 0};
+	
+	if((isInMenu(0, 420, 70)) && isMClick){
+		isEditing[0] = 1;
+		isEditing[1] = 0;
+		isEditing[2] = 0;
+	}else if((isInMenu(0, 350, 70)) && isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 1;
+		isEditing[2] = 0;		
+	}else if((isInMenu(0, 280, 70)) && isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 1;		
+	}else if(isMClick){
+		isEditing[0] = 0;
+		isEditing[1] = 0;
+		isEditing[2] = 0;		
+	}
+
+	
+	//画提示方块
+	if(isInMenu(0, 420, 70) == 0){
+		DrawOneTips(0, 420, 70, "MOrange1", "next", "White", isEditing[0]);
+	}else{
+		DrawOneTips(0, 420, 70, "MOrange2", "next", "White", isEditing[0]);
+	}
+	if(isInMenu(0, 350, 70) == 0){
+		DrawOneTips(0, 350, 70, "Morange1", "prev", "White", isEditing[1]);
+	}else{
+		DrawOneTips(0, 350, 70, "MOrange2", "prev", "White", isEditing[1]);
+	}	
+	if(isInMenu(0, 280, 70) == 0){
+		DrawOneTips(0, 280, 70, "MOrange1", "删除", "White", isEditing[2]);
+	}else{
+		DrawOneTips(0, 280, 70, "MOrange2", "删除", "White", isEditing[2]);
+	}
+
+	
+	static bool iscontine = 0;
+	if(isMClick == 0) iscontine = 0;
+	if((isEditing[0] || isEditing[1] || isEditing[2]) && iscontine){
+		return 0;
+	}
+	if(isMClick) iscontine = 1;
+
+	if(isEditing[0]){
+		return 1;  //next
+	}else if(isEditing[1]){
+		return 2;  //prev
+	}else if(isEditing[2]){
+		return 3;  //删除
+	}else{
+		return 0;
+	}	
 }

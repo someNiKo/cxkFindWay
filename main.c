@@ -87,6 +87,11 @@ static struct kun{
 typedef struct map{
 	struct map *prev;  //上一个节点的地址
 	BOX listMap[20][30];  //该节点的地图
+	int X;
+	int Y;
+	int KUNX;
+	int KUNY;
+	bool canfind;
 	struct map *next;  //下一个节点的地址
 } Map;  //存贮历史地图数据的双向链表
 
@@ -166,7 +171,7 @@ void Main()
 	SetWindowTitle("CXK finding way");
 	SetWindowSize(1920,1080);
 	InitGraphics();
-	InitConsole();
+	//InitConsole();
 	
 	double screen_x = GetWindowWidth();
 	double screen_y = GetWindowHeight();
@@ -576,20 +581,24 @@ void display()
 	if(MenuList2State[1]) menu2fun2();
 	if(MenuList2State[2]) menu2fun3();
 	if(MenuList2State[3]) menu2fun4();
+
+	//menulist3
+	if(MenuList3State) menu3fun1();
 	
 	//画坤
     if(canKUNdisplay){
 		DrawKUN(KUN.x, KUN.y, KUN.fps, KUN.direction);
 	} 
 
-	//辅助线
-	/*MovePen(300, 540);
-	SetPenColor("Black");
-	SetPenSize(1);
-	DrawLine(1000,0);
-	MovePen(960, 100);
-	DrawLine(0,900);*?
-	return;*/
+	//偶像练习生
+	if(!canMapdisplay && !MenuList2State[0]){
+		SetPenColor("Black");
+		SetPointSize(150);
+		SetFont("文道机械黑");
+		MovePen(400, 300);
+		DrawTextString("偶像练习生");
+	}
+
 }
 
 /*********************工具********************/
@@ -603,8 +612,20 @@ void display()
 bool encode()
 {
 	FILE *p;
+	int X = 0, Y = 0;
+	if(KUN.x - mapStartX > 0){
+		X = (int)((KUN.x - mapStartX) / width);
+	}else{
+		X = 0;
+	}
+	if(KUN.y - mapStartY > 0){
+		Y = (int)((KUN.y - mapStartY - 15) / width);
+	}else{
+		Y = 0;
+	}	
 	if((p = fopen("GameMap.txt", "a")) == NULL){
 		p = fopen("GameMap.txt", "w");
+		fprintf(p, "%d %d %2d %2d %d                                               \n", nowMapx, nowMapy, X, Y, canfind);
 		for(int i = 0; i < 20; i++){
 			for(int j = 0; j < 30; j++){
 				fprintf(p, "%d ", nowMap[i][j].state);
@@ -614,6 +635,7 @@ bool encode()
 		fclose(p);
 		return 1;  //没找到文件就新建一个
 	}else{
+		fprintf(p, "%d %d %2d %2d %d                                               \n", nowMapx, nowMapy, X, Y, canfind);
 		for(int i = 0; i < 20; i++){
 			for(int j = 0; j < 30; j++){
 				fprintf(p, "%d ", nowMap[i][j].state);
@@ -633,13 +655,8 @@ bool encode()
 成功 return *HEAD
 失败 return NULL
 ***********************/
-bool decode()
+bool decode(FILE *fp)
 {
-	FILE *fp;
-	if((fp = fopen("GameMap.txt", "r")) == NULL){
-		return 0;
-	}
-	
 	Map *mp = (Map *)malloc(sizeof(Map));
 	if(head == NULL){  //第一次建立链表
 		mp->prev = NULL;  //当前节点之前为空
@@ -653,20 +670,56 @@ bool decode()
 		end = mp;         //尾节点为当前节点
 	}
 	
-	for(int i = 0; i < 20; i++){
+	for(int i = 0; i < 21; i++){
 		char str[62];
 		char *pstr = str;
 		fgets(str, 62, fp);
-		for(int j = 0; j < 30; j++){
-			//处理地图数据
-			mp->listMap[i][j].state = *pstr - '0';
-			mp->listMap[i][j].x = j + 1;
-			mp->listMap[i][j].y = i + 1;
+		if(i == 0){
+			mp->X = *pstr - '0';
+			pstr += 1;
+			mp->X = mp->X * 10 + *pstr - '0';
+			pstr += 2;
+			
+			mp->Y = *pstr - '0';
+			pstr += 1;
+			mp->Y = mp->Y * 10 + *pstr - '0';
+			pstr += 1;
+			while(*pstr == ' '){
+				pstr += 1;
+			}
+			
+			mp->KUNX = *pstr - '0';
+			pstr += 1;
+			if(*pstr >= '0' && *pstr <= '9'){
+				mp->KUNX = mp->KUNX * 10 + *pstr - '0';
+			}
+			pstr += 1;
+			while(*pstr == ' '){
+				pstr += 1;
+			}
+			
+			mp->KUNY = *pstr - '0';
+			pstr += 1;
+			if(*pstr >= '0' && *pstr <= '9'){
+				mp->KUNY = mp->KUNY * 10 + *pstr - '0';
+			}
+			pstr += 1;
+			while(*pstr == ' '){
+				pstr += 1;
+			}			
+			
+			mp->canfind = *pstr - '0';			
+		}else{
+			for(int j = 0; j < 30; j++){
+				//处理地图数据
+			mp->listMap[i - 1][j].state = *pstr - '0';
+			mp->listMap[i - 1][j].x = j + 1;
+			mp->listMap[i - 1][j].y = i;
 			//移动字符串指针 pstr
 			pstr += 2;
+			}
 		}
 	}
-	fclose(fp);
 	return 1;
 }
 
@@ -675,9 +728,13 @@ bool decode()
 *********************/
 void setOffsetToLineStart(FILE* file, int line, int lineLength)
 {
-    long offset = (line - 1) * lineLength;
-    fseek(file, offset, SEEK_SET);
+    fseek(file, 0, SEEK_SET);  // 将文件指针移动到文件开头
+
+    for (int i = 1; i < line; i++) {
+        fseek(file, lineLength + 2, SEEK_CUR);  // 向后偏移 lineLength 个字节，并跳过换行符 '\n'
+    }
 }
+
 
 /*********************
 获取文件有效行数的工具
@@ -727,16 +784,18 @@ void mapcopy(bool flag)
 void menu1fun1()  
 {
 	static bool other = 1; 
+	static bool flag = 1;
 	if(other){
 		MenuList2State[1] = 0;
 		MenuList2State[0] = 0;
+		MenuList1State[3] = 0;
+		flag = 1;
 		other = 0;
 	}
 	
 	canKUNdisplay = 1;
 	canMapdisplay = 1;
 	
-	static bool flag = 1;
 	static bool isFinish = 0;
 	
 	if(flag){
@@ -812,7 +871,7 @@ void menu1fun1()
 			}
 		}
 	}
-	printf("%d %d %lf\n",max(abs(X + 1 - endX), abs(Y + 1 - endY)), canfind, ((double)walls/(double)(nowMapx*nowMapy)));
+
 	if(max(abs(X + 1 - endX), abs(Y + 1 - endY)) <= 5 && canfind == 0 && ((double)walls/(double)(nowMapx*nowMapy) > 0.75)){
 		canfind1 = 1;
 	}else if(max(abs(X + 1 - endX), abs(Y + 1 - endY)) > 5 && canfind == 0){
@@ -855,8 +914,7 @@ void menu1fun1()
 *****************/
 void menu1fun2()
 {
-	canKUNdisplay = 1;
-	canMapdisplay = 1;
+	MenuList1State[0] = 1;
 	MenuList1State[1] = 0;  //只执行一次
 }
 
@@ -865,7 +923,11 @@ void menu1fun2()
 *****************/
 void menu1fun3()
 {
-	
+	canMapdisplay = 0;
+	mapcopy(0);
+	encode();
+	MenuList2State[2] = 0;
+	exit(0);	
 }
 
 /*****************
@@ -873,7 +935,121 @@ void menu1fun3()
 *****************/
 void menu1fun4()
 {
+	static bool other = 1; 
+	if(other){
+		MenuList2State[1] = 0;
+		MenuList2State[0] = 0;
+		MenuList1State[0] = 0;
+		other = 0;
+	}	
+	
+	canKUNdisplay = 1;
+	canMapdisplay = 1;
+
+	static bool isFinish = 0;
+
+		
 	//记得读取文件有效行数
+	int data = DrawMenu1fun4();
+	static Map *now = NULL, *lastnow = NULL;
+	if(now == NULL){
+		now = head;
+	}
+	if(now != lastnow){
+		//得到起始坐标
+		nowMapx = now->X;
+		nowMapy = now->Y;
+		if(nowMapx % 2 == 0){
+			mapStartX = 960 - (nowMapx / 2) * width;
+		}else{
+			mapStartX = 960 - (nowMapx / 2) * width - width / 2;
+		}
+		if(nowMapy % 2 == 0){
+			mapStartY = 540 - (nowMapy / 2) * width;
+		}else{
+			mapStartY = 540 - (nowMapy / 2) * width - width / 2;
+		}		
+		
+		//更改坤的初始位置  
+		KUN.x = mapStartX + (now->KUNX + 1) * width - width/2;
+		KUN.y = mapStartY + (now->KUNY + 1) * width - width/2 + 15;
+
+		//是否可以寻路
+		canfind = now->canfind;
+		
+		//复制地图
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 30; j++){
+				nowMap[i][j] = now->listMap[i][j];
+				if(nowMap[i][j].state == 2){
+					startX = j + 1;
+					startY = i + 1;
+				}else if(nowMap[i][j].state == 3){
+					endX = j + 1;
+					endY = i + 1;
+				}
+			}
+		}		
+			
+	}
+
+	if(data && isMClick){
+		FILE *fp = fopen("GameMap.txt", "r");
+		rewind(fp);
+		int maps = countValidLines(fp) / 21;
+		for(int i = 0; i < maps; i++){
+			setOffsetToLineStart(fp, 1 + 21 * i, 60);
+			decode(fp);
+		}
+		fclose(fp);
+		lastnow = now;
+		if(now == NULL){
+			now = head;
+		}
+		Map *p = head;
+		switch (data)
+		{
+		case 1:  //next
+			if(now->next != NULL) now = now->next;
+			else now = head;
+			break;
+		case 2:  //prev
+			if(now->prev != NULL) now = now->prev;
+			else now = end;
+			break;
+		case 3:  //删除
+			p = now;
+			now->prev->next = now->next;
+			now->next->prev = now->prev;
+			now = now->prev;
+			free(p);
+			//删除文件中的没写			
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	if(MenuList2State[2] || MenuList2State[3] || MenuList2State[0] || MenuList2State[1] || MenuList1State[0]) isFinish = 1;
+	
+	if(isFinish){
+		now = NULL;
+		lastnow = NULL;
+		//free
+		Map *p = head;
+		Map *q;
+		while(p != NULL){
+			q = p;
+			p = p->next;
+			free(q);
+		}		
+		other = 1;
+		canKUNdisplay = 0;
+		canMapdisplay = 0;	
+		isFinish = 0;
+		MenuList1State[3] = 0;
+	}	
 }
 
 /*****************
@@ -1058,5 +1234,8 @@ void menu2fun4()
 *****************/
 void menu3fun1()
 {
-	
+	char command[256];
+    snprintf(command, sizeof(command), "start %s", "help.txt");
+    system(command);
+	MenuList3State = 0;
 }

@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <math.h>
+#include <string.h>
 #include <omp.h>
 
 #include <windows.h>
@@ -35,6 +37,7 @@ void DrawBox();
 int DrawMenu2fun1();
 int DrawMenu2fun2();
 int DrawMenu1fun1();
+int DrawMenu1fun4();
 bool isInMenu(double x, double y, double high);
 
 

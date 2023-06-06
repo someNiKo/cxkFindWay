@@ -19,6 +19,7 @@ void CreateMaze(int **maze, int x, int y);
 void Output(int **maze, int count, int dep);
 
 /************************生成地图**************************/
+
 /************
 传入地图长宽
 传回生成好的地图

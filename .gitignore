@@ -1,3 +1,4 @@
 *.o
 *.exe
 GameMap.txt
+help.txt
